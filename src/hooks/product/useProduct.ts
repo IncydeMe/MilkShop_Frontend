@@ -1,18 +1,20 @@
+"use client"
+
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axios from '@/lib/axios';
 import type { Product } from "../../types/product";
 
 //CRUD operations for products
 
 //Fetch all products
-export const useProduct = () => {
+export function useProduct() {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<Error | null>(null);
 
     const fetchProducts = async () => {
         try {
-            const response = await axios.get<Product[]>("/api/products");
+            const response = await axios.get<Product[]>("/products");
             setProducts(response.data);
         } catch (error : any) {
             setError(error.message);

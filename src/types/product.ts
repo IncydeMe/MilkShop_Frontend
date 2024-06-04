@@ -4,10 +4,17 @@ export type Product = {
     price: number;
     productCategory: ProductCategory[];
     description: string;
-    imageUrl: string | string[];
+    imageUrl: string;
+    productRating: ProductRating;
 }
 
 export type ProductCategory = {
     id: number;
     name: string;
+}
+
+export type ProductRating = {
+    id: number;
+    rating: number;
+    reviewCount: number;
 }
