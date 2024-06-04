@@ -1,5 +1,9 @@
+"use client";
+
 import { Product } from '@/types/product'
 import React from 'react'
+
+import { SkeletonCard } from './skeleton-card'
 
 import {
     Card,
@@ -9,6 +13,7 @@ import {
     CardHeader,
     CardTitle,
   } from "@/components/ui/card"
+import { useProduct } from '@/hooks/product/useProduct'
 
 interface ProductCardProps {
     product: Product,
@@ -26,30 +31,32 @@ const RtoS = (rating: number) => {
 
 const ProductCard : React.FC<ProductCardProps> = ({
     product,
-    type
 }) => {
-  return (
-    <Card id={product.id.toString()}>
-        <CardHeader>
-            <img src={product.imageUrl} alt={product.name} />
-        </CardHeader>
-        <CardContent>
-            <CardDescription>{product.name}</CardDescription>
-        </CardContent>
-        <CardFooter>
-            <div className='flex items-center gap-4'>
-                {/* Rating Points */}
-                <div className='flex gap-1'>
-                    {RtoS(product.productRating.rating)}
-                </div>
-                {/* Review Count */}
-                <p>{product.productRating.reviewCount}</p>
-            </div>
-            {/* Price */}
-            <p>${product.price}</p>
-        </CardFooter>
-    </Card>
-  )
+    const { loading } = useProduct();
+    return (
+        <>
+        {loading ? <SkeletonCard /> : (
+            <Card key={product.id}>
+                <CardHeader>
+                    <img src={product.imageUrl} alt={product.name} />
+                </CardHeader>
+                <CardContent>
+                    <CardDescription>{product.name}</CardDescription>
+                </CardContent>
+                <CardFooter>
+                    <div className='flex items-center gap-4'>
+                        {/* Rating Points */}
+                        <div className='flex gap-1'>
+                            {RtoS(product.productRating)}
+                        </div>
+                    </div>
+                    {/* Price */}
+                    <p>{product.price.toLocaleString('vi-VN', {style : 'currency', currency : 'VND'})}</p>
+                </CardFooter>
+            </Card>
+        )}
+        </>
+    )
 }
 
 export default ProductCard

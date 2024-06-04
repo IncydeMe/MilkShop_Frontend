@@ -2,10 +2,11 @@ export type Product = {
     id: number;
     name: string;
     price: number;
+    productSpecialty: ProductSpecialty;
     productCategory: ProductCategory[];
     description: string;
     imageUrl: string;
-    productRating: ProductRating;
+    productRating: number;
 }
 
 export type ProductCategory = {
@@ -13,8 +14,9 @@ export type ProductCategory = {
     name: string;
 }
 
-export type ProductRating = {
-    id: number;
-    rating: number;
-    reviewCount: number;
+export enum ProductSpecialty {
+    NEW = "NEW",
+    DISCOUNT = "DISCOUNT",
+    SPECIAL = "SPECIAL",
+    NORMAL = "NORMAL"
 }
