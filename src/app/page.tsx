@@ -1,10 +1,15 @@
+import UserFooter from "@/components/shared/user/user-footer";
+import UserHeader from "@/components/shared/user/user-header";
 import Image from "next/image";
 
 export default function Home() {
   return (
-    <main>
-      <h1>Home</h1>
-      <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-    </main>
+    <>
+      <UserHeader />
+      <main className="min-h-screen">
+        <h1>Home</h1>
+      </main>
+      <UserFooter />
+    </>
   );
 }
