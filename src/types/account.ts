@@ -4,23 +4,24 @@ export type Account = {
     email: string;
     password: string;
     role: Role;
-    imageUrl: string ;
+    imageUrl: string;
     createdAt: Date;
     updatedAt: Date;
     disabled: boolean;
     address: Address;
 }
 
-export type Role = {
-    id: number;
-    name: string;
+export enum Role {
+    ADMIN = "ADMIN",
+    USER = "USER",
+    SELLER = "SELLER",
+    GUEST = "GUEST"
 }
 
 export type Address = {
-    id: number;
     street: string;
     city: string;
-    state: string;
+    state?: string;
     country: string;
-    zipCode: string;
+    zipCode?: string;
 }
