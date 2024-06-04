@@ -8,35 +8,33 @@ import Image from "next/image";
 
 import CustomLoading from '../../public/Loading.jpg';
 
+import { Skeleton } from "@/components/ui/skeleton";
+import { SkeletonCard } from "@/components/shared/user/skeleton-card";
+
 export default function Home() {
   const { products, error, loading } = useProduct();
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-          <Image src={CustomLoading} alt="Loading" width={360} height={420}/>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p className="text-red-500 text-[36px]">{error.message}</p>
-      </div>
-    );
-  }
-
   return (
-      <main className="min-h-screen">
-        <section className="container mx-auto px-4 py-8">
-          <h1 className="text-2xl font-bold text-gray-800">Products</h1>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {products.map((product) => (
-              <ProductCard key={product.id} product={product} type="normal" />
-            ))}
+    <section className="min-h-screen px-10 py-2">
+      {/* Handling Loading State */}
+      {loading && (
+        <section>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
           </div>
+          <p className="text-center py-4">Đang tải, xin chờ chút</p>
         </section>
-      </main>
-  );
+      )}
+      {/* Handling Error State */}
+      {error && <p>{error.message}</p>}
+      {/* Handling Success State */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {products.map((product) => (
+          <ProductCard key={product.id} product={product} type="normal"/>
+        ))}
+      </div>
+    </section>
+  )
 }

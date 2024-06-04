@@ -12,10 +12,6 @@ import {
 
 interface ProductCardProps {
     product: Product,
-    //Type of Product
-    //Normal: Regular product
-    //Discount: Product on discount
-    //Special: Special Product (e.g. New Arrival, Limited Time Offer)
     type: 'normal' | 'discount' | 'special',
 }
 
