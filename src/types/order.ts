@@ -3,12 +3,18 @@ import { Product } from "./product";
 
 export type Order = {
     id: number;
-    orderDate: Date;
+    accountId: number;
+    voucherCode: string;
     orderStatus: OrderStatus;
-    orderItem: OrderItem[];
     payment: Payment;
-    account: Account;
     address: Address;
+    orderDate: Date;
+}
+
+export type OrderDetail = {
+    id: number;
+    order: Order;
+    orderItem: OrderItem[];
 }
 
 export type OrderStatus = {
@@ -24,9 +30,10 @@ export type OrderItem = {
 
 export type Payment = {
     id: number;
+    totalPrice: number;
     paymentDate: Date;
-    paymentMethod: PaymentMethod;//credit card, debit card, paypal, etc.
-    paymentStatus: PaymentStatus;//pending, completed, cancelled
+    paymentMethod: PaymentMethod; //credit card, debit card, paypal, etc.
+    paymentStatus: PaymentStatus; //pending, completed, cancelled
 }
 
 export type PaymentMethod = {

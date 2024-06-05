@@ -1,3 +1,5 @@
+"use client"
+
 import { useState, useEffect } from "react";
 import axios from '@/lib/axios';
 import type { Blog } from "../../types/blog";

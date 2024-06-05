@@ -1,19 +1,21 @@
+"use client"
+
 import { useState, useEffect } from "react";
 import axios from '@/lib/axios';
-import type { ProductCategory } from "../../types/productCategory";
+import type { ProductCategory } from "../../types/product";
 
 //CRUD operations for product categories
 
 //Fetch all product categories
-export function useProductCategories() {
-    const [productCategories, setProductCategories] = useState<ProductCategory[]>([]);
+export function useProductCategory() {
+    const [categories, setCategories] = useState<ProductCategory[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<Error | null>(null);
 
-    const fetchProductCategories = async () => {
+    const fetchCategories = async () => {
         try {
             const response = await axios.get<ProductCategory[]>("/categories");
-            setProductCategories(response.data);
+            setCategories(response.data);
         } catch (error : any) {
             setError(error.message);
         } finally {
@@ -22,22 +24,22 @@ export function useProductCategories() {
     };
 
     useEffect(() => {
-        fetchProductCategories();
+        fetchCategories();
     }, []);
 
-    return { productCategories, loading, error };
+    return { categories, loading, error };
 };
 
 //Fetch a single product category
-export const useSingleProductCategory = (id: number) => {
-    const [productCategory, setProductCategory] = useState<ProductCategory | null>(null);
+export const useSingleCategory = (id: number) => {
+    const [category, setCategory] = useState<ProductCategory | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<Error | null>(null);
 
-    const fetchProductCategory = async (id: number) => {
+    const fetchCategory = async (id: number) => {
         try {
             const response = await axios.get<ProductCategory>(`/categories/${id}`);
-            setProductCategory(response.data);
+            setCategory(response.data);
         } catch (error : any) {
             setError(error.message);
         } finally {
@@ -46,35 +48,35 @@ export const useSingleProductCategory = (id: number) => {
     };
 
     useEffect(() => {
-        fetchProductCategory(id);
+        fetchCategory(id);
     }, [id]);
 
-    return { productCategory, loading, error };
+    return { category, loading, error };
 };
 
 //Create a new product category
-export const createProductCategory = async (productCategory: ProductCategory) => {
+export const createCategory = async (category: ProductCategory) => {
     try {
-        await axios.post("/categories", productCategory);
+        await axios.post("/categories", category);
     } catch (error : any) {
-        throw new Error(error.message);
+        console.error(error.message);
     }
 };
 
-//Update an existing product category
-export const updateProductCategory = async (productCategory: ProductCategory) => {
+//Update a product category
+export const updateCategory = async (category: ProductCategory) => {
     try {
-        await axios.put(`/categories/${productCategory.id}`, productCategory);
+        await axios.put(`/categories/${category.categoryId}`, category);
     } catch (error : any) {
-        throw new Error(error.message);
+        console.error(error.message);
     }
 };
 
-//Delete an existing product category
-export const deleteProductCategory = async (id: number) => {
+//Delete a product category
+export const deleteCategory = async (id: number) => {
     try {
         await axios.delete(`/categories/${id}`);
     } catch (error : any) {
-        throw new Error(error.message);
+        console.error(error.message);
     }
 };

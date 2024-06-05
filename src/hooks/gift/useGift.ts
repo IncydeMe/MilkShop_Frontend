@@ -1,3 +1,5 @@
+"use client"
+
 import { useState, useEffect } from "react";
 import axios from "axios";
 import type { Gift } from "../../types/gift";
@@ -36,7 +38,7 @@ export const useSingleGift = (id: number) => {
     const [error, setError] = useState<Error | null>(null);
 
     //Fetch a single gift
-    const fetchGift = async () => {
+    const fetchGift = async (id: number) => {
         try {
             const response = await axios.get<Gift>(`/gifts/${id}`);
             setGift(response.data);
@@ -48,7 +50,7 @@ export const useSingleGift = (id: number) => {
     };
 
     useEffect(() => {
-        fetchGift();
+        fetchGift(id);
     }, [id]);
 
     return { gift, loading, error };

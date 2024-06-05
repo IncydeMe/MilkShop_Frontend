@@ -1,3 +1,5 @@
+"use client"
+
 import { useState, useEffect } from "react";
 import axios from "axios";
 import type { Voucher } from "../../types/voucher";
@@ -34,7 +36,7 @@ export const useSingleVoucher = (id: number) => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<Error | null>(null);
 
-    const fetchVoucher = async () => {
+    const fetchVoucher = async (id: number) => {
         try {
             const response = await axios.get<Voucher>(`/vouchers/${id}`);
             setVoucher(response.data);
@@ -46,7 +48,7 @@ export const useSingleVoucher = (id: number) => {
     };
 
     useEffect(() => {
-        fetchVoucher();
+        fetchVoucher(id);
     }, [id]);
 
     return { voucher, loading, error };

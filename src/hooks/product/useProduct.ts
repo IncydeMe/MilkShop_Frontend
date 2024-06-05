@@ -36,7 +36,7 @@ export const useSingleProduct = (id: number) => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<Error | null>(null);
 
-    const fetchProduct = async () => {
+    const fetchProduct = async (id: number) => {
         try {
             const response = await axios.get<Product>(`/products/${id}`);
             setProduct(response.data);
@@ -48,7 +48,7 @@ export const useSingleProduct = (id: number) => {
     };
 
     useEffect(() => {
-        fetchProduct();
+        fetchProduct(id);
     }, [id]);
 
     return { product, loading, error };
