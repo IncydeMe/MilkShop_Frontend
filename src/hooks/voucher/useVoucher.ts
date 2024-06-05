@@ -12,7 +12,7 @@ export const useVoucher = () => {
 
     const fetchVouchers = async () => {
         try {
-            const response = await axios.get<Voucher[]>("/api/vouchers");
+            const response = await axios.get<Voucher[]>("/vouchers");
             setVouchers(response.data);
         } catch (error : any) {
             setError(error.message);
@@ -36,7 +36,7 @@ export const useSingleVoucher = (id: number) => {
 
     const fetchVoucher = async () => {
         try {
-            const response = await axios.get<Voucher>(`/api/vouchers/${id}`);
+            const response = await axios.get<Voucher>(`/vouchers/${id}`);
             setVoucher(response.data);
         } catch (error : any) {
             setError(error.message);
@@ -55,7 +55,7 @@ export const useSingleVoucher = (id: number) => {
 //Create a new voucher
 export const createVoucher = async (voucher: Voucher) => {
     try {
-        await axios.post("/api/vouchers", voucher);
+        await axios.post("/vouchers", voucher);
     } catch (error : any) {
         throw new Error(error.message);
     }
@@ -64,7 +64,7 @@ export const createVoucher = async (voucher: Voucher) => {
 //Update a voucher
 export const updateVoucher = async (voucher: Voucher) => {
     try {
-        await axios.put(`/api/vouchers/${voucher.id}`, voucher);
+        await axios.put(`/vouchers/${voucher.id}`, voucher);
     } catch (error : any) {
         throw new Error(error.message);
     }
@@ -73,7 +73,7 @@ export const updateVoucher = async (voucher: Voucher) => {
 //Delete a voucher
 export const deleteVoucher = async (id: number) => {
     try {
-        await axios.delete(`/api/vouchers/${id}`);
+        await axios.delete(`/vouchers/${id}`);
     } catch (error : any) {
         throw new Error(error.message);
     }
