@@ -10,8 +10,8 @@ export type Product = {
 }
 
 export type ProductCategory = {
-    id: number;
-    name: string;
+    categoryId: number;
+    categoryName: string;
 }
 
 export enum ProductSpecialty {

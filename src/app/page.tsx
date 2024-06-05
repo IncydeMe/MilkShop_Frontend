@@ -157,15 +157,14 @@ export default function Home() {
             {products.slice(0, 4).map((product) => (
               <ProductCard key={product.id} product={product} type="normal" />
             ))}
-            <Button
-              variant={"ghost"}
-              className="w-fit rounded-[4px] grid grid-cols-subgrid col-start-4 text-right text-gray-700 font-semibold hover:underline hover:underline-offet-2 hover:text-pink-500"
-            >
-              <span className="flex justify-end gap-4 items-center">
-                Xem Thêm Sản Phẩm
-                <ChevronRight size={16} />
-              </span>
+          <Link href={'/products'} className="w-fit rounded-[4px] grid grid-cols-subgrid col-start-4 justify-items-end text-right text-gray-700 font-semibold hover:underline hover:underline-offet-2 hover:text-pink-500">
+            <Button variant={'ghost'} >
+                <span className="flex justify-end gap-4 items-center">
+                  Xem Thêm Sản Phẩm
+                  <ChevronRight size={16} />
+                </span>
             </Button>
+          </Link>
           </div>
         </div>
         <div className="flex flex-col gap-4 justify-end">
@@ -176,15 +175,14 @@ export default function Home() {
             {products.slice(0, 4).map((product) => (
               <ProductCard key={product.id} product={product} type="discount" />
             ))}
-            <Button
-              variant={"ghost"}
-              className="w-fit rounded-[4px] grid grid-cols-subgrid col-start-4 text-right text-gray-700 font-semibold hover:underline hover:underline-offet-2 hover:text-pink-500"
-            >
-              <span className="flex justify-end gap-4 items-center">
-                Xem Thêm Sản Phẩm
-                <ChevronRight size={16} />
-              </span>
-            </Button>
+            <Link href={'/products'} className="w-fit rounded-[4px] grid grid-cols-subgrid col-start-4 justify-items-end text-right text-gray-700 font-semibold hover:underline hover:underline-offet-2 hover:text-pink-500">
+              <Button variant={'ghost'} >
+                <span className="flex justify-end gap-4 items-center">
+                  Xem Thêm Sản Phẩm
+                  <ChevronRight size={16} />
+                </span>
+              </Button>
+            </Link>
           </div>
         </div>
         <div className="flex flex-col gap-4 justify-end">
@@ -195,15 +193,14 @@ export default function Home() {
             {products.slice(0, 4).map((product) => (
               <ProductCard key={product.id} product={product} type="special" />
             ))}
-            <Button
-              variant={"ghost"}
-              className="w-fit rounded-[4px] grid grid-cols-subgrid col-start-4 text-right text-gray-700 font-semibold hover:underline hover:underline-offet-2 hover:text-pink-500"
-            >
-              <span className="flex justify-end gap-4 items-center">
-                Xem Thêm Sản Phẩm
-                <ChevronRight size={16} />
-              </span>
-            </Button>
+            <Link href={'/products'} className="w-fit rounded-[4px] grid grid-cols-subgrid col-start-4 justify-items-end text-right text-gray-700 font-semibold hover:underline hover:underline-offet-2 hover:text-pink-500">
+              <Button variant={'ghost'}>
+                <span className="flex justify-end gap-4 items-center">
+                  Xem Thêm Sản Phẩm
+                  <ChevronRight size={16} />
+                </span>
+              </Button>
+            </Link>
           </div>
         </div>
         <div className="flex flex-col gap-4 justify-end">
@@ -214,15 +211,14 @@ export default function Home() {
             {products.slice(0, 4).map((product) => (
               <ProductCard key={product.id} product={product} type="normal" />
             ))}
-            <Button
-              variant={"ghost"}
-              className="w-fit rounded-[4px] grid grid-cols-subgrid col-start-4 text-right text-gray-700 font-semibold hover:underline hover:underline-offet-2 hover:text-pink-500"
-            >
-              <span className="flex justify-end gap-4 items-center">
-                Xem Thêm Sản Phẩm
-                <ChevronRight size={16} />
-              </span>
-            </Button>
+            <Link href={'/products'} className="w-fit rounded-[4px] grid grid-cols-subgrid col-start-4 justify-items-end text-right text-gray-700 font-semibold hover:underline hover:underline-offet-2 hover:text-pink-500">
+              <Button variant={'ghost'}>
+                <span className="flex justify-end gap-4 items-center">
+                  Xem Thêm Sản Phẩm
+                  <ChevronRight size={16} />
+                </span>
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
