@@ -13,7 +13,7 @@ export const useAccount = () => {
     //Fetch all accounts
     const fetchAccounts = async () => {
         try {
-            const response = await axios.get<Account[]>("/api/accounts");
+            const response = await axios.get<Account[]>("/accounts");
             setAccounts(response.data);
         } catch (error : any) {
             setError(error.message);
@@ -36,9 +36,9 @@ export const useSingleAccount = (id: number) => {
     const [error, setError] = useState<Error | null>(null);
 
     //Fetch a single account
-    const fetchAccount = async () => {
+    const fetchAccount = async (id: number) => {
         try {
-            const response = await axios.get<Account>(`/api/accounts/${id}`);
+            const response = await axios.get<Account>(`/accounts/${id}`);
             setAccount(response.data);
         } catch (error : any) {
             setError(error.message);
@@ -48,7 +48,7 @@ export const useSingleAccount = (id: number) => {
     };
 
     useEffect(() => {
-        fetchAccount();
+        fetchAccount(id);
     }, [id]);
 
     return { account, loading, error };
@@ -57,7 +57,8 @@ export const useSingleAccount = (id: number) => {
 //Create a new account
 export const createAccount = async (account: Account) => {
     try {
-        await axios.post("/api/accounts", account);
+        const result = await axios.post("/accounts", account);
+        console.log(result);
     } catch (error : any) {
         throw new Error(error.message);
     }
@@ -66,7 +67,7 @@ export const createAccount = async (account: Account) => {
 //Update an existing account
 export const updateAccount = async (account: Account) => {
     try {
-        await axios.put(`/api/accounts/${account.id}`, account);
+        await axios.put(`/accounts/${account.id}`, account);
     } catch (error : any) {
         throw new Error(error.message);
     }
@@ -75,7 +76,7 @@ export const updateAccount = async (account: Account) => {
 //Delete an existing account
 export const disableAccount = async (id: number) => {
     try {
-        await axios.delete(`/api/accounts/${id}`);
+        await axios.delete(`/accounts/${id}`);
     } catch (error : any) {
         throw new Error(error.message);
     }

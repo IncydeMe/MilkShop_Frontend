@@ -13,7 +13,7 @@ export const useGift = () => {
     //Fetch all gifts
     const fetchGifts = async () => {
         try {
-            const response = await axios.get<Gift[]>("/api/gifts");
+            const response = await axios.get<Gift[]>("/gifts");
             setGifts(response.data);
         } catch (error : any) {
             setError(error.message);
@@ -38,7 +38,7 @@ export const useSingleGift = (id: number) => {
     //Fetch a single gift
     const fetchGift = async () => {
         try {
-            const response = await axios.get<Gift>(`/api/gifts/${id}`);
+            const response = await axios.get<Gift>(`/gifts/${id}`);
             setGift(response.data);
         } catch (error : any) {
             setError(error.message);
@@ -57,7 +57,7 @@ export const useSingleGift = (id: number) => {
 //Create a new gift
 export const createGift = async (gift: Gift) => {
     try {
-        await axios.post("/api/gifts", gift);
+        await axios.post("/gifts", gift);
     } catch (error : any) {
         throw new Error(error.message);
     }
@@ -66,7 +66,7 @@ export const createGift = async (gift: Gift) => {
 //Update a gift
 export const updateGift = async (gift: Gift) => {
     try {
-        await axios.put(`/api/gifts/${gift.id}`, gift);
+        await axios.put(`/gifts/${gift.id}`, gift);
     } catch (error : any) {
         throw new Error(error.message);
     }
@@ -75,7 +75,7 @@ export const updateGift = async (gift: Gift) => {
 //Delete a gift
 export const deleteGift = async (id: number) => {
     try {
-        await axios.delete(`/api/gifts/${id}`);
+        await axios.delete(`/gifts/${id}`);
     } catch (error : any) {
         throw new Error(error.message);
     }

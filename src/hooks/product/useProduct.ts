@@ -38,7 +38,7 @@ export const useSingleProduct = (id: number) => {
 
     const fetchProduct = async () => {
         try {
-            const response = await axios.get<Product>(`/api/products/${id}`);
+            const response = await axios.get<Product>(`/products/${id}`);
             setProduct(response.data);
         } catch (error : any) {
             setError(error.message);
@@ -57,7 +57,7 @@ export const useSingleProduct = (id: number) => {
 //Create a new product
 export const createProduct = async (product: Product) => {
     try {
-        await axios.post("/api/products", product);
+        await axios.post("/products", product);
     } catch (error : any) {
         throw new Error(error.message);
     }
@@ -66,7 +66,7 @@ export const createProduct = async (product: Product) => {
 //Update an existing product
 export const updateProduct = async (product: Product) => {
     try {
-        await axios.put(`/api/products/${product.id}`, product);
+        await axios.put(`/products/${product.id}`, product);
     } catch (error : any) {
         throw new Error(error.message);
     }
@@ -75,7 +75,7 @@ export const updateProduct = async (product: Product) => {
 //Delete an existing product
 export const deleteProduct = async (id: number) => {
     try {
-        await axios.delete(`/api/products/${id}`);
+        await axios.delete(`/products/${id}`);
     } catch (error : any) {
         throw new Error(error.message);
     }
