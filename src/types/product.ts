@@ -1,3 +1,5 @@
+import { Feedback } from "./feedback";
+
 export type Product = {
     productId: number;
     name: string;
@@ -8,6 +10,7 @@ export type Product = {
     imageUrl: string;
     totalRating: number;
     quantity: number;
+    feedbacks: Feedback[];
 }
 
 export type ProductCategory = {

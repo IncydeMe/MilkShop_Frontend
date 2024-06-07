@@ -4,6 +4,7 @@ import { Product } from '@/types/product'
 import React from 'react'
 
 import { SkeletonCard } from './skeleton-card'
+import { motion } from 'framer-motion';
 
 import {
     Card,
@@ -15,7 +16,7 @@ import {
   } from "@/components/ui/card"
 import { useProduct } from '@/hooks/product/useProduct'
 import { Button } from '@/components/ui/button';
-import { Eye, ShoppingCart } from 'lucide-react';
+import { Eye, ShoppingCart, Star } from 'lucide-react';
 import { useCart } from '@/hooks/cart/useCart';
 import Link from 'next/link';
 
@@ -27,7 +28,7 @@ interface ProductCardProps {
 const RtoS = (rating: number) => {
     const stars = [];
     for (let i = 0; i < rating; i++) {
-        stars.push(<i className='fas fa-star text-yellow-400'></i>);
+        stars.push(<Star size={24} color='yellow'/>);
     }
     return stars;
 
@@ -59,9 +60,20 @@ const ProductCard : React.FC<ProductCardProps> = ({
             <Card key={product.productId}>
                 <CardHeader className='relative' onMouseEnter={handleHoverState} onMouseLeave={handleHoverState}>
                     <div className='relative'>
-                        <img src={product.imageUrl} alt={product.name} className='w-full h-[360px] rounded-[8px] object-cover'/>
+                        <motion.div
+                            initial={{ scale: 1 }}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                        >
+                            <img src={product.imageUrl} alt={product.name} className='w-full h-[360px] rounded-[8px] object-cover'/>
+                        </motion.div>
                         {hoverState && (
-                            <div className='absolute top-0 left-0 w-full h-full rounded-[8px] bg-black bg-opacity-50 flex justify-center items-center'>
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.2 }}
+                                className='absolute top-0 left-0 w-full h-full rounded-[8px] bg-black bg-opacity-50 flex justify-center items-center'>
                                 <div className='flex flex-col items-center gap-4'>
                                     <Button
                                         onClick={handleAddToCart} 
@@ -80,7 +92,7 @@ const ProductCard : React.FC<ProductCardProps> = ({
                                         </Button>
                                     </Link>
                                 </div>
-                            </div>
+                            </motion.div>
                         )}
                     </div>
                     <div className='absolute top-4 right-4'>
@@ -88,18 +100,18 @@ const ProductCard : React.FC<ProductCardProps> = ({
                         {type === 'special' && <span className='bg-blue-500 text-white px-2 py-1 rounded-[4px]'>Special</span>}
                     </div>
                 </CardHeader>
-                <CardContent>
+                <CardContent className='w-full'>
                     <CardDescription>{product.name}</CardDescription>
                 </CardContent>
-                <CardFooter>
+                <CardFooter className='flex justify-between items-center'>
+                    <p>{product.price.toLocaleString('vi-VN', {style : 'currency', currency : 'VND'})}</p>
                     <div className='flex items-center gap-4'>
                         {/* Rating Points */}
                         <div className='flex gap-1'>
                             {RtoS(product.totalRating)}
                         </div>
+                        <p className='text-[12px]'>{'(' + product.totalRating + ')'}</p>
                     </div>
-                    {/* Price */}
-                    <p>{product.price.toLocaleString('vi-VN', {style : 'currency', currency : 'VND'})}</p>
                 </CardFooter>
             </Card>
         )}

@@ -77,6 +77,7 @@ function ProductDetailsPage({params}: {params: {id: number}}) {
             </section>
             <section>
                 <h2 className='text-[36px] font-semibold underline undeline-offset-2'>Phản hồi từ người sử dụng</h2>
+                
             </section>
         </section>
     )

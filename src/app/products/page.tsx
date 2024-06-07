@@ -7,14 +7,46 @@ import ProductCard from '@/components/shared/user/product-card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Slider } from '@/components/ui/slider';
 import { useProductCategory } from '@/hooks/product/useProductCategory';
+import {
+    Pagination,
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+  } from "@/components/ui/pagination"
 
 function ProductsPage() {
     const { products, error, loading } = useProduct();
     const { categories } = useProductCategory();
 
     const [value, setValue] = useState([0, 9000000]);
+
+    //For Pagination
+    const [currentPage, setCurrentPage] = useState(1);//Default Page
+    const [itemsPerPage, setItemsPerPage] = useState(12);//Default Items per Page
+
+    const indexOfLastItem = currentPage * itemsPerPage;//Index of Last Item
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;//Index of First Item
+    const currentItems = products.slice(indexOfFirstItem, indexOfLastItem);//Current Items
+
+    const pages = [];//Array of Pages
+    //Loop through the number of pages
+    for (let i = 1; i <= Math.ceil(products.length / itemsPerPage); i++) {
+        pages.push(i);//Push Pages
+    }
+
+    const handlePagination = (page: number) => {
+        if (page < 1) page = 1;
+        if (page > pages.length) page = pages.length;
+        setCurrentPage(page);
+    }
+
+
     return (
         <main className='flex justify-between p-10'>
+            {/* Filter Section */}
             <section className='flex flex-col justify-start gap-4'>
                 <h1 className='text-3xl font-bold'>Tất cả sản phẩm</h1>
                 {/* Filter Section */}
@@ -81,15 +113,34 @@ function ProductsPage() {
                 </section>
             </section>
 
+            <section className='flex flex-col'>
+                {/* Handling Loading */}
                 {loading && <p>Loading...</p>}
+                {/* Handling Error */}
                 {error && <p>Error: {error.message}</p>}
-                <ul className='grid grid-cols-3 gap-10 p-4 mr-6'>
-                    {products.map(product => (
-                        <li key={product.productId}>
-                            <ProductCard product={product} key={product.productId} type='normal' />
-                        </li>
+                {/* Product List */}
+                <ul className='grid grid-cols-3 gap-6 p-4 w-full'>
+                    {currentItems.map((product,index) => (
+                        <ProductCard key={index} product={product} type='normal'/>
                     ))}
                 </ul>
+                {/* Pagination */}
+                <Pagination>
+                    <PaginationContent>
+                        <PaginationItem>
+                            <PaginationPrevious className='cursor-pointer' onClick={() => handlePagination(currentPage - 1)}/>
+                        </PaginationItem>
+                        {pages.map((number) => (
+                            <PaginationItem key={number}>
+                                <PaginationLink onClick={() =>handlePagination(number)} isActive={currentPage === number} id={number.toString()} className='cursor-pointer'>{number}</PaginationLink>
+                            </PaginationItem>
+                        ))}
+                        <PaginationItem>
+                            <PaginationNext className='cursor-pointer' onClick={() => handlePagination(currentPage + 1)}/>
+                        </PaginationItem>
+                    </PaginationContent>
+                </Pagination>
+            </section>
         </main>
     )
 }

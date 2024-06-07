@@ -22,9 +22,11 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import UserHeader from "@/components/shared/user/user-header";
 import UserFooter from "@/components/shared/user/user-footer";
+import { useProductCategory } from "@/hooks/product/useProductCategory";
 
 export default function Home() {
   const { products, error, loading } = useProduct();
+  const { categories } = useProductCategory();
 
   function renderCustomLoading() {
     const customLoadingList = [];
@@ -44,8 +46,11 @@ export default function Home() {
     return customLoadingList;
   }
 
+  //Choose 4 random categories to display
+  const randomCategories = categories.sort(() => Math.random() - 0.5).slice(0, 4);  
+
   return (
-    <>
+    <main>
       <UserHeader />
       <section className="min-h-screen px-10 py-2">
         <Carousel className="w-[90%] mx-auto my-4">
@@ -55,18 +60,7 @@ export default function Home() {
         </Carousel>
         {/* Handling Error State */}
         {error && <p>{error.message}</p>}
-        {loading && (
-          <section>
-            <div className="grid grid-cols-1 md:grid-cols-4 justify-items-center gap-10">
-              <SkeletonCard />
-              <SkeletonCard />
-              <SkeletonCard />
-              <SkeletonCard />
-              <SkeletonCard />
-              <SkeletonCard />
-            </div>
-          </section>
-        )}
+        
         {/* Handling Success State */}
         <section>
           {/* Category Browsing */}
@@ -79,38 +73,25 @@ export default function Home() {
               hợp
             </p>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="flex flex-col gap-4 rounded-lg p-4">
-                <Image
-                  src={CustomLoading}
-                  alt="Category"
-                  className="rounded-[8px] shadow-md"
-                />
-                <p className="text-center font-semibold">Tên danh mục</p>
-              </div>
-              <div className="flex flex-col gap-4 rounded-lg p-4">
-                <Image
-                  src={CustomLoading}
-                  alt="Category"
-                  className="rounded-[8px] shadow-md"
-                />
-                <p className="text-center font-semibold">Tên danh mục</p>
-              </div>
-              <div className="flex flex-col gap-4 rounded-lg p-4">
-                <Image
-                  src={CustomLoading}
-                  alt="Category"
-                  className="rounded-[8px] shadow-md"
-                />
-                <p className="text-center font-semibold">Tên danh mục</p>
-              </div>
-              <div className="flex flex-col gap-4 rounded-lg p-4">
-                <Image
-                  src={CustomLoading}
-                  alt="Category"
-                  className="rounded-[8px] shadow-md"
-                />
-                <p className="text-center font-semibold">Tên danh mục</p>
-              </div>
+              {loading && (
+                <div className="grid grid-cols-subgrid col-span-4 my-4">
+                  <SkeletonCard />
+                  <SkeletonCard />
+                  <SkeletonCard />
+                  <SkeletonCard />
+                </div>
+              )}
+              {randomCategories.map((category) => (
+                <div className="flex flex-col gap-4 rounded-lg p-4">
+                  <Image
+                    src={CustomLoading}
+                    alt="Category"
+                    className="rounded-[8px] shadow-md"
+                  />
+                  <p className="text-center font-semibold">{category.categoryName}</p>
+                </div>
+              ))}
+              
             </div>
           </div>
           {/* Product Listing */}
@@ -122,6 +103,14 @@ export default function Home() {
               Sản phẩm nổi bật
             </h1>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              {loading && (
+                  <div className="grid grid-cols-subgrid col-span-4 my-4">
+                    <SkeletonCard />
+                    <SkeletonCard />
+                    <SkeletonCard />
+                    <SkeletonCard />
+                  </div>
+                )}
               {products.slice(0, 4).map((product) => (
                 <ProductCard key={product.productId} product={product} type="normal" />
               ))}
@@ -140,6 +129,14 @@ export default function Home() {
               Sản phẩm giảm giá
             </h1>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              {loading && (
+                <div className="grid grid-cols-subgrid col-span-4 my-4">
+                  <SkeletonCard />
+                  <SkeletonCard />
+                  <SkeletonCard />
+                  <SkeletonCard />
+                </div>
+              )}
               {products.slice(0, 4).map((product) => (
                 <ProductCard key={product.productId} product={product} type="discount" />
               ))}
@@ -158,6 +155,14 @@ export default function Home() {
               Sản phẩm đặc biệt
             </h1>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              {loading && (
+                <div className="grid grid-cols-subgrid col-span-4 my-4">
+                  <SkeletonCard />
+                  <SkeletonCard />
+                  <SkeletonCard />
+                  <SkeletonCard />
+                </div>
+              )}
               {products.slice(0, 4).map((product) => (
                 <ProductCard key={product.productId} product={product} type="special" />
               ))}
@@ -176,6 +181,14 @@ export default function Home() {
               Sản phẩm mới
             </h1>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              {loading && (
+                <div className="grid grid-cols-subgrid col-span-4 my-4">
+                  <SkeletonCard />
+                  <SkeletonCard />
+                  <SkeletonCard />
+                  <SkeletonCard />
+                </div>
+              )}
               {products.slice(0, 4).map((product) => (
                 <ProductCard key={product.productId} product={product} type="normal" />
               ))}
@@ -193,6 +206,6 @@ export default function Home() {
         {/* Handling Loading State */}
       </section>
       <UserFooter />
-    </>
+    </main>
   );
 }
