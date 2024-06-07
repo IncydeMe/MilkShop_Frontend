@@ -3,11 +3,7 @@ import { ShoppingCartIcon, TicketPercent, UserCircle2 } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-  } from "@/components/ui/popover"
+import {Popover, PopoverTrigger, PopoverContent} from "@nextui-org/popover";
 
 import { Button } from '@/components/ui/button';
 import SearchInput from '@/components/search';
@@ -73,13 +69,13 @@ const UserHeader: React.FC = () => {
                     {userNav.map((nav, index) => (
                         <li key={index} className='w-full'>
                             {nav.isPopup ? (
-                                <Popover>
+                                <Popover placement='bottom-end'>
                                     <PopoverTrigger title={nav.name}>
-                                        <div className='cursor-pointer'>
+                                        <Button>
                                             {nav.icon}
-                                        </div>
+                                        </Button>
                                     </PopoverTrigger>
-                                    <PopoverContent align='end' className='w-full bg-white'>
+                                    <PopoverContent className='w-full bg-white'>
                                         <ul className='flex flex-col gap-4'>
                                             {nav.popupItems?.map((popup, index) => (
                                                 <li key={index} className='w-full'>

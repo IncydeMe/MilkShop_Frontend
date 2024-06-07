@@ -1,11 +1,11 @@
 "use client"
 
 import React from 'react'
-import { Input } from './ui/input'
+import { Input } from '@/components/ui/input'
 import { Search } from 'lucide-react'
-import { Button } from './ui/button'
+import { Button } from '@/components/ui/button'
 
-const SearchInput: React.FC = () => {
+const HeaderSearchInput: React.FC = () => {
     const [search, setSearch] = React.useState('');
     const [onMouseEnter, setOnMouseEnter] = React.useState(false);
 
@@ -17,8 +17,8 @@ const SearchInput: React.FC = () => {
         setSearch(e.target.value)
     }
     return (
-        <section className='w-full bg-white shadow-md'>
-            <div className='flex items-center justify-between px-10 py-6'>
+        <section className='w-6/12'>
+            <div className='flex items-center justify-between px-10'>
                 <div className='flex items-center w-full gap-4'>
                     <Input placeholder='Tìm kiếm sản phẩm...' className='rounded-[4px]'/>
                     <Button variant={'ghost'} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseEnter}
@@ -32,4 +32,4 @@ const SearchInput: React.FC = () => {
     )
 }
 
-export default SearchInput
+export default HeaderSearchInput;
