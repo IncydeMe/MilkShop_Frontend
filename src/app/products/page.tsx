@@ -6,11 +6,11 @@ import ProductCard from '@/components/shared/user/product-card';
 
 import { Checkbox } from '@/components/ui/checkbox';
 import { Slider } from '@/components/ui/slider';
-import { useCategory } from '@/hooks/category/useCategory';
+import { useProductCategory } from '@/hooks/product/useProductCategory';
 
 function ProductsPage() {
     const { products, error, loading } = useProduct();
-    const { categories } = useCategory();
+    const { categories } = useProductCategory();
 
     const [value, setValue] = useState([0, 9000000]);
     return (
@@ -83,10 +83,10 @@ function ProductsPage() {
 
                 {loading && <p>Loading...</p>}
                 {error && <p>Error: {error.message}</p>}
-                <ul className='grid grid-cols-4 gap-10 p-4 mr-6'>
+                <ul className='grid grid-cols-3 gap-10 p-4 mr-6'>
                     {products.map(product => (
-                        <li key={product.id}>
-                            <ProductCard product={product} key={product.id} type='normal' />
+                        <li key={product.productId}>
+                            <ProductCard product={product} key={product.productId} type='normal' />
                         </li>
                     ))}
                 </ul>
