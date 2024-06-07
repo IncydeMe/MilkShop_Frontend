@@ -17,7 +17,7 @@ import { useCart } from '@/hooks/cart/useCart';
 const generalNav = [
     { name: 'Trang chủ', path: '/' },
     { name: 'Sản phẩm', path: '/products'},
-    { name: 'Blogs', path: '/blogs' }
+    { name: 'Blogs', path: '/blog' }
 ]
 
 const userNav = [
@@ -161,7 +161,8 @@ const UserHeader: React.FC = () => {
                                         <PopoverContent align='end' className='w-full bg-white rounded-[4px]'>
                                             <ul className='flex flex-col gap-4'>
                                                 {nav.name === 'Giỏ hàng' ? (
-                                                    <CartItems />
+                                                    // <CartItems /> will show the cart items
+                                                    <p>Test</p>
                                                 ) : (
                                                     nav.popupItems?.map((item, index) => (
                                                         <li key={index} className='flex flex-col items-start rounded-[4px] hover:bg-pink-500 hover:text-white transition-all ease-out duration-100'>

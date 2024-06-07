@@ -6,4 +6,17 @@ export type Feedback = {
     content: string;
     createdDate: Date;
     rating: number;
+    feedbackMedia: FeedbackMedia[];
+}
+
+export type FeedbackMedia = {
+    id: number;
+    feedbackId: number;
+    mediaUrl: string;
+    mediaType: MediaType;
+}
+
+export enum MediaType {
+    IMAGE = "IMAGE",
+    VIDEO = "VIDEO"
 }

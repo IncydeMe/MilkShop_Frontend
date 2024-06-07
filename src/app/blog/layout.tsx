@@ -4,13 +4,13 @@ import { Montserrat } from "next/font/google";
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: "Cửa hàng sữa - Sản phẩm",
-    description: "Cửa hàng sữa - Sản phẩm",
+    title: "Cửa hàng sữa - Blogs",
+    description: "Cửa hàng sữa - Blogs",
   };
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
-export default function ProductsLayout({
+export default function BlogLayout({
     children
 }: Readonly<{
     children: React.ReactNode;

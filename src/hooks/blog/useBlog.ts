@@ -66,7 +66,7 @@ export const createBlog = async (blog: Blog) => {
 //Update an existing blog
 export const updateBlog = async (blog: Blog) => {
     try {
-        await axios.put(`/blogs/${blog.id}`, blog);
+        await axios.put(`/blogs/${blog.blogId}`, blog);
     } catch (error : any) {
         throw new Error(error.message);
     }

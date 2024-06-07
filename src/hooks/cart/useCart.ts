@@ -15,16 +15,12 @@ export const useCart = () => {
       const storedCart = localStorage.getItem('cart');
       if (storedCart) {
         setCart(JSON.parse(storedCart));
-        console.log('Cart fetched from localStorage');
-        console.log(JSON.parse(storedCart));
       }
     }, []);
   
     // Store the cart in localStorage whenever it changes
     useEffect(() => {
         localStorage.setItem('cart', JSON.stringify(cart));
-        console.log('Cart stored in localStorage');
-        console.log(cart);
     }, [cart]);
   
     const addProduct = (product: Product) => {
