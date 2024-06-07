@@ -1,12 +1,13 @@
 export type Product = {
-    id: number;
+    productId: number;
     name: string;
     price: number;
     productSpecialty: ProductSpecialty;
     productCategory: ProductCategory[];
     description: string;
     imageUrl: string;
-    productRating: number;
+    totalRating: number;
+    quantity: number;
 }
 
 export type ProductCategory = {

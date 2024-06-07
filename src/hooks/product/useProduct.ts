@@ -66,7 +66,7 @@ export const createProduct = async (product: Product) => {
 //Update an existing product
 export const updateProduct = async (product: Product) => {
     try {
-        await axios.put(`/products/${product.id}`, product);
+        await axios.put(`/products/${product.productId}`, product);
     } catch (error : any) {
         throw new Error(error.message);
     }
