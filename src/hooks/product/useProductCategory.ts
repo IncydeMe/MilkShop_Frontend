@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import axios from '@/lib/axios';
-import type { ProductCategory } from "../../types/product";
+import type { ProductCategory } from "../../types/productCategory";
 
 //CRUD operations for product categories
 

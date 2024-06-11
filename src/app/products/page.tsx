@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react';
 import { useProduct } from '@/hooks/product/useProduct';
 import ProductCard from '@/components/shared/user/product-card';
-
 import { Checkbox } from '@/components/ui/checkbox';
 import { Slider } from '@/components/ui/slider';
 import { useProductCategory } from '@/hooks/product/useProductCategory';
@@ -15,47 +14,54 @@ import {
     PaginationLink,
     PaginationNext,
     PaginationPrevious,
-  } from "@/components/ui/pagination"
+} from "@/components/ui/pagination";
+import { Product } from '@/types/product';
 
 function ProductsPage() {
     const { products, error, loading } = useProduct();
     const { categories } = useProductCategory();
 
     const [value, setValue] = useState([0, 9000000]);
+    const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
+    const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+
+    useEffect(() => {
+        setFilteredProducts(products.filter(product =>
+            (selectedCategories.length === 0 || selectedCategories.includes(product.categoryId)) &&
+            product.price >= value[0] && product.price <= value[1]
+        ));
+    }, [products, selectedCategories, value]);
 
     //For Pagination
-    const [currentPage, setCurrentPage] = useState(1);//Default Page
-    const [itemsPerPage, setItemsPerPage] = useState(12);//Default Items per Page
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(12);
 
-    const indexOfLastItem = currentPage * itemsPerPage;//Index of Last Item
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;//Index of First Item
-    const currentItems = products.slice(indexOfFirstItem, indexOfLastItem);//Current Items
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = filteredProducts.slice(indexOfFirstItem, indexOfLastItem);
 
-    const pages = [];//Array of Pages
-    //Loop through the number of pages
-    for (let i = 1; i <= Math.ceil(products.length / itemsPerPage); i++) {
-        pages.push(i);//Push Pages
+    const pages = [];
+    for (let i = 1; i <= Math.ceil(filteredProducts.length / itemsPerPage); i++) {
+        pages.push(i);
     }
 
     const handlePagination = (page: number) => {
         if (page < 1) page = 1;
         if (page > pages.length) page = pages.length;
         setCurrentPage(page);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-
 
     return (
         <main className='flex justify-between p-10'>
             {/* Filter Section */}
             <section className='flex flex-col justify-start gap-4'>
                 <h1 className='text-3xl font-bold'>Tất cả sản phẩm</h1>
-                {/* Filter Section */}
-                <section className='flex flex-col gap-4'>
+                <section className='flex flex-col gap-4 sticky top-[240px] left-10'>
                     <section className="col-span-1 mr-8">
-                        {/* Filter section */}
-                        <div className="w-fit">
+                        <div className="w-[240px]">
                             <div className="flex justify-between items-center gap-10 mb-4">
-                                <h2 className="text-2xl w-full uppercase font-semibold">
+                                <h2 className="text-2xl w-full uppercase font-bold underline underline-offset-1">
                                     Bộ lọc
                                 </h2>
                             </div>
@@ -68,13 +74,22 @@ function ProductsPage() {
                                 <ul className="grid grid-cols-2 gap-2">
                                     {categories.map((category) => (
                                         <li key={category.categoryId} className='flex items-center gap-2'>
-                                            <Checkbox className="w-[12px] h-[12px]" />
+                                            <Checkbox
+                                                value={category.categoryId}
+                                                onCheckedChange={(checked) => {
+                                                    if (checked) {
+                                                        setSelectedCategories([...selectedCategories, category.categoryId]);
+                                                    } else {
+                                                        setSelectedCategories(selectedCategories.filter((id) => id !== category.categoryId));
+                                                    }
+                                                }}
+                                            />
                                             <p className='text-black text-[14px]'>{category.categoryName}</p>
                                         </li>
                                     ))}
                                 </ul>
                             </div>
-                            <div className="my-2">
+                            {/* <div className="my-2">
                                 <h3 className="text-lg font-semibold my-2 underline underline-offset-2 uppercase">
                                     Giá tiền
                                 </h3>
@@ -82,7 +97,7 @@ function ProductsPage() {
                                     value={value}
                                     max={9000000}
                                     step={1000}
-                                    className="max-w-[360px] bg-black rounded-[12px] my-4"
+                                    className="w-[240px] bg-black rounded-[12px] my-4"
                                     onValueChange={setValue}
                                 />
 
@@ -106,43 +121,38 @@ function ProductsPage() {
                                         </span>
                                     </div>
                                 </div>
-                            </div>
-                            
+                            </div> */}
                         </div>
                     </section>
                 </section>
             </section>
 
             <section className='flex flex-col'>
-                {/* Handling Loading */}
                 {loading && <p>Loading...</p>}
-                {/* Handling Error */}
                 {error && <p>Error: {error.message}</p>}
-                {/* Product List */}
                 <ul className='grid grid-cols-3 gap-6 p-4 w-full'>
-                    {currentItems.map((product,index) => (
-                        <ProductCard key={index} product={product} type='normal'/>
+                    {currentItems.map(product => (
+                        <ProductCard key={product.productId} product={product} type='normal' />
                     ))}
                 </ul>
-                {/* Pagination */}
                 <Pagination>
                     <PaginationContent>
                         <PaginationItem>
-                            <PaginationPrevious className='cursor-pointer' onClick={() => handlePagination(currentPage - 1)}/>
+                            <PaginationPrevious className='cursor-pointer' onClick={() => handlePagination(currentPage - 1)} />
                         </PaginationItem>
                         {pages.map((number) => (
                             <PaginationItem key={number}>
-                                <PaginationLink onClick={() =>handlePagination(number)} isActive={currentPage === number} id={number.toString()} className='cursor-pointer'>{number}</PaginationLink>
+                                <PaginationLink onClick={() => handlePagination(number)} isActive={currentPage === number} id={number.toString()} className='cursor-pointer'>{number}</PaginationLink>
                             </PaginationItem>
                         ))}
                         <PaginationItem>
-                            <PaginationNext className='cursor-pointer' onClick={() => handlePagination(currentPage + 1)}/>
+                            <PaginationNext className='cursor-pointer' onClick={() => handlePagination(currentPage + 1)} />
                         </PaginationItem>
                     </PaginationContent>
                 </Pagination>
             </section>
         </main>
-    )
+    );
 }
 
-export default ProductsPage
+export default ProductsPage;

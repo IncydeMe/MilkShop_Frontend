@@ -18,7 +18,7 @@ export function useProduct() {
             setProducts(response.data);
         } catch (error : any) {
             setError(error.message);
-        } finally {
+        } finally {                                 
             setLoading(false);
         }
     };

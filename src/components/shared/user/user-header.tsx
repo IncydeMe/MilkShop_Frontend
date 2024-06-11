@@ -10,12 +10,13 @@ import {
 import Link from "next/link";
 import React, { useState } from "react";
 
-import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/popover";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 
 import { Button } from "@/components/ui/button";
 import SearchInput from "@/components/search";
 
 import { useCart } from "@/hooks/cart/useCart";
+import { CartProduct } from "@/types/cart";
 
 const generalNav = [
   { name: "Trang chủ", path: "/" },
@@ -46,7 +47,6 @@ const userNav = [
     icon: <ShoppingCartIcon size={24} />,
     name: "Giỏ hàng",
     path: "/user/cart",
-    //pop up will show the cart items
     isPopup: true,
   },
   {
@@ -58,12 +58,12 @@ const userNav = [
       {
         name: "Phần quả",
         icon: <Gift size={24} />,
-        path: "/user/gifts",
+        path: "/user/special/gifts",
       },
       {
         name: "Phiếu giảm giá",
         icon: <TicketPercent size={24} />,
-        path: "/user/vouchers",
+        path: "/user/special/vouchers",
       },
     ],
   },
@@ -71,20 +71,10 @@ const userNav = [
 
 const CartItems = () => {
   const { cart, isEmpty } = useCart();
-  interface CartItemProps {
-    item: {
-      product: {
-        imageUrl: string;
-        name: string;
-        price: number;
-      };
-      quantity: number;
-    };
-  }
 
-  const CartItem: React.FC<CartItemProps> = ({ item }) => {
+  const CartItem: React.FC<{ item: CartProduct }> = ({ item }) => {
     return (
-      <li className="flex items-center justify-between w-full">
+      <li key={item.product.productId} className="flex items-center justify-between w-full">
         <img
           src={item.product.imageUrl}
           alt={item.product.name}
@@ -171,8 +161,7 @@ const UserHeader: React.FC = () => {
                     >
                       <ul className="flex flex-col gap-4">
                         {nav.name === "Giỏ hàng" ? (
-                          // <CartItems /> will show the cart items
-                          <p>Test</p>
+                          <CartItems />
                         ) : (
                           nav.popupItems?.map((item, index) => (
                             <li

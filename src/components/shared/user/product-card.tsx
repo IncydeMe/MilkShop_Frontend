@@ -12,9 +12,9 @@ import {
     CardDescription,
     CardFooter,
     CardHeader,
-    CardTitle,
   } from "@/components/ui/card"
-import { useProduct } from '@/hooks/product/useProduct'
+import { useProduct } from '@/hooks/product/useProduct';
+import { useSingleCategory } from '@/hooks/product/useProductCategory';
 import { Button } from '@/components/ui/button';
 import { Eye, ShoppingCart, Star } from 'lucide-react';
 import { useCart } from '@/hooks/cart/useCart';
@@ -28,25 +28,25 @@ interface ProductCardProps {
 const RtoS = (rating: number) => {
     const stars = [];
     for (let i = 0; i < rating; i++) {
-        stars.push(<Star size={24} color='yellow'/>);
+        stars.push(<Star key={i} size={24} color='yellow'/>);
     }
     return stars;
 
 }
-
 
 const ProductCard : React.FC<ProductCardProps> = ({
     product,
     type
 }) => {
     const { loading } = useProduct();
-    const { cart, addProduct } = useCart();
+    const { addProduct } = useCart();
+    const { category } = useSingleCategory(product.categoryId);
+    const { cart } = useCart();
     const [hoverState, setHoverState] = React.useState(false);
 
     //Handle Add to Cart
     const handleAddToCart = () => {
         addProduct(product);
-        console.log('Product added to cart');
         console.log(JSON.stringify(cart));
     }
 
@@ -57,7 +57,7 @@ const ProductCard : React.FC<ProductCardProps> = ({
     return (
         <>
         {loading ? <SkeletonCard /> : (
-            <Card key={product.productId}>
+            <Card key={product.productId} className='border-r-[1px] border-b-[1px] border-gray-500/20'>
                 <CardHeader className='relative' onMouseEnter={handleHoverState} onMouseLeave={handleHoverState}>
                     <div className='relative'>
                         <motion.div
@@ -98,6 +98,7 @@ const ProductCard : React.FC<ProductCardProps> = ({
                     <div className='absolute top-4 right-4'>
                         {type === 'discount' && <span className='bg-red-500 text-white px-2 py-1 rounded-[4px]'>-%</span>}
                         {type === 'special' && <span className='bg-blue-500 text-white px-2 py-1 rounded-[4px]'>Special</span>}
+                        {type === 'normal' && <span className='bg-gray-500 text-white px-2 py-1 rounded-[4px]'>{category?.categoryName}</span>}
                     </div>
                 </CardHeader>
                 <CardContent className='w-full'>
@@ -119,4 +120,4 @@ const ProductCard : React.FC<ProductCardProps> = ({
     )
 }
 
-export default ProductCard
+export default ProductCard;

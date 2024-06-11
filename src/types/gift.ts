@@ -1,7 +1,7 @@
 export type Gift = {
-    id: number;
+    giftId: number;
     name: string;
-    price: number;
+    point: number; //member points required to redeem the gift
     description: string;
-    imageUrl: string | string[];
+    imageUrl: string;
 }
