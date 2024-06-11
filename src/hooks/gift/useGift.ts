@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "@/lib/axios";
 import type { Gift } from "../../types/gift";
 
 //CRUD operations for gifts
@@ -68,7 +68,7 @@ export const createGift = async (gift: Gift) => {
 //Update a gift
 export const updateGift = async (gift: Gift) => {
     try {
-        await axios.put(`/gifts/${gift.id}`, gift);
+        await axios.put(`/gifts/${gift.giftId}`, gift);
     } catch (error : any) {
         throw new Error(error.message);
     }

@@ -5,7 +5,7 @@ export type Product = {
     name: string;
     price: number;
     productSpecialty: ProductSpecialty;
-    productCategory: ProductCategory[];
+    categoryId: number;
     description: string;
     imageUrl: string;
     totalRating: number;
@@ -13,10 +13,6 @@ export type Product = {
     feedbacks: Feedback[];
 }
 
-export type ProductCategory = {
-    categoryId: number;
-    categoryName: string;
-}
 
 export enum ProductSpecialty {
     NEW = "NEW",

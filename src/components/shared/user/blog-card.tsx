@@ -26,7 +26,7 @@ const BlogCard: React.FC<BlogCardProps> = ({
     return (
         <Card>
             <CardHeader>
-                <img src={blog.imageSrc} alt={blog.title} className='w-full h-full object-cover'/>
+                <img src={blog.imageUrl} alt={blog.title} className='w-full h-[120px] object-cover'/>
             </CardHeader>
             <CardContent>
                 {blog.title}

@@ -6,6 +6,9 @@ import { Button } from '@/components/ui/button';
 import { ChevronLeft, Star } from 'lucide-react';
 import Link from 'next/link';
 import ProductCard from '@/components/shared/user/product-card';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Badge } from '@/components/ui/badge';
+import { useSingleCategory } from '@/hooks/product/useProductCategory';
 
 const RatingToStars = ({ rating = 0 }: { rating?: number }) => {
     const stars = [];
@@ -19,14 +22,13 @@ const RatingToStars = ({ rating = 0 }: { rating?: number }) => {
 function ProductDetailsPage({params}: {params: {id: number}}) {
     const { product, loading, error } = useSingleProduct(params.id);
     const { products } = useProduct();
+    const { category } = useSingleCategory(product?.categoryId || 0);
+
+    console.log(category?.categoryName);
 
     const getRandomProducts = (list: typeof products) => {
         let shuffle = list.sort(() => Math.random() - 0.5);
         return shuffle.slice(0, 4);
-    }
-
-    if (loading) {
-        return <p>Loading...</p>;
     }
 
     if (error) {
@@ -41,21 +43,58 @@ function ProductDetailsPage({params}: {params: {id: number}}) {
             </section>
             <section className='flex gap-10'>
                 <div>
-                    <img src={product?.imageUrl} alt={product?.name} className='w-[480px] h-full object-cover rounded-[8px] shadow-md'/>
+                    {
+                        loading? (
+                            <Skeleton className='w-[480px] h-full bg-gray-500 rounded-[8px] shadow-md'/>
+                        ) : (
+                            <img src={product?.imageUrl} alt={product?.name} className='w-[480px] h-full object-cover rounded-[8px] shadow-md'/>
+                        )
+                    }
                 </div>
                 <div className='flex flex-col gap-4'>
-                    <h2 className='text-[36px] font-bold'>{product?.name}</h2>
-                    <p>{product?.description}</p>
-                    <div className='flex items-center gap-4'>
-                        <RatingToStars rating={product?.totalRating} />
-                        <p>{product?.totalRating.toPrecision(1)}</p>
-                    </div>
-                    <p className='font-semibold'>
-                        {product?.price.toLocaleString(
-                            'vi-VN',
-                            { style: 'currency', currency: 'VND' }
-                        )}
-                    </p>
+                    {
+                        loading? (
+                            <Skeleton className='w-[480px] h-[36px] bg-gray-500 rounded-[8px] shadow-md'/>
+                        ) : (
+                            <h2 className='text-[36px] font-bold'>{product?.name}</h2>
+                        )
+                    }
+                    {
+                        loading? (
+                            <Skeleton className='w-[120px] h-[36px] bg-gray-500 rounded-[8px] shadow-md'/>
+                        ) : (
+                            <Badge className='w-fit bg-gray-500 hover:bg-gray-700 text-white'>{category?.categoryName}</Badge>
+                        )
+                    }
+                    {
+                        loading? (
+                            <Skeleton className='w-[480px] h-[24px] bg-gray-500 rounded-[8px] shadow-md'/>
+                        ) : (
+                            <p>{product?.description}</p>
+                        )
+                    }
+                    {
+                        loading? (
+                            <Skeleton className='w-[120px] h-[24px] bg-gray-500 rounded-[8px] shadow-md'/>
+                        ) : (
+                            <div className='flex items-center gap-4'>
+                                <RatingToStars rating={product?.totalRating} />
+                                <p>{product?.totalRating.toPrecision(1)}</p>
+                            </div>
+                        )
+                    }
+                    {
+                        loading? (
+                            <Skeleton className='w-[120px] h-[24px] bg-gray-500 rounded-[8px] shadow-md'/>
+                        ) : (
+                            <p className='font-semibold'>
+                                {product?.price.toLocaleString(
+                                    'vi-VN',
+                                    { style: 'currency', currency: 'VND' }
+                                )}
+                            </p>
+                        )
+                    }
 
                     <div className='flex justify-start items-center gap-8'>
                         <Button className='bg-purple-500 text-white px-4 py-2 rounded-[8px] hover:bg-purple-600 transition-all ease-linear duration-300'>
@@ -70,9 +109,17 @@ function ProductDetailsPage({params}: {params: {id: number}}) {
             <section>
                 <h2 className='text-[36px] font-semibold underline undeline-offset-2'>Sản phẩm tương tự</h2>
                 <div className='grid grid-cols-4 gap-10'>
-                    {getRandomProducts(products).map(product => (
-                        <ProductCard key={product.productId} product={product} type='normal'/>
-                    ))}
+                    {
+                        loading? (
+                            Array.from({length: 4}).map((_, index) => (
+                                <Skeleton key={index} className='w-[240px] h-[320px] bg-gray-500 rounded-[8px] shadow-md'/>
+                            ))
+                        ) : (
+                            getRandomProducts(products).map((product) => (
+                                <ProductCard type='normal' key={product.productId} product={product}/>
+                            ))
+                        )
+                    }
                 </div>
             </section>
             <section>
