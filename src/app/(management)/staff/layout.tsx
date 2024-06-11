@@ -17,7 +17,7 @@ export default function StaffLayout({
         <body className={montserrat.className}>
             <main className="flex bg-[#FEFEFE]">
                 <StaffSidebar />
-                <section className="p-12">{children}</section>
+                <section className="px-12 py-8">{children}</section>
             </main>
         </body>
       </html>
