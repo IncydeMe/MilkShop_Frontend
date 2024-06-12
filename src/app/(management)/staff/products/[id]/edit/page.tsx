@@ -30,11 +30,12 @@ import { Textarea } from '@/components/ui/textarea';
 import * as zod from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { DropzoneOptions } from 'react-dropzone';
-import { Paperclip } from 'lucide-react';
+import { ChevronLeft, Paperclip } from 'lucide-react';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import Image from 'next/image';
 import { type Product } from '@/types/product';
 import { useSingleProduct, updateProduct } from '@/hooks/product/useProduct';
+import { useRouter } from 'next/navigation';
 
 const formSchema = zod.object({
   //Object for form validation
@@ -50,18 +51,19 @@ function UpdateProductPage({params} : {params: {id: number}}) {
   const { categories } = useProductCategory();
   const { product, loading, error } = useSingleProduct(params.id);
 
+  const router = useRouter();
   //Debug
-  
+  console.log(product?.name);
 
   const form = useForm<zod.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       productName: product?.name || '',
       productPrice: product?.price.toString() || '100000',
-      productCategoryId: product?.productCategoryId || 1,
+      productCategoryId: product?.productCategoryId || 1 ,
       productDescription: product?.description || '',
       productImageSrc: product?.imageUrl || '',
-      productQuantity: product?.quantity.toString() || '100'
+      productQuantity: product?.quantity.toString() || '0'
     }
   });
 
@@ -97,7 +99,10 @@ function UpdateProductPage({params} : {params: {id: number}}) {
 
   return (
     <div>
-      <h1 className='text-[36px] font-bold'>Cập nhật sản phẩm {product?.name}</h1>
+      <div className='flex gap-x-4 items-center'>
+        <ChevronLeft size={36} onClick={() => router.back()}/>
+        <h1 className='text-[36px] font-bold'>Cập nhật sản phẩm</h1>
+      </div>
       <Toaster position='top-center'/>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className='w-full grid grid-cols-2 gap-6'>
@@ -155,7 +160,7 @@ function UpdateProductPage({params} : {params: {id: number}}) {
                         <SelectContent>
                           <SelectGroup>
                             {categories.map((category) => (
-                              <SelectItem key={category.categoryId} value={category.categoryName} className='bg-white focus:bg-gray-400'>
+                              <SelectItem key={category.productCategoryId} value={category.categoryName} className='bg-white focus:bg-gray-400'>
                                 {category.categoryName}
                               </SelectItem>
                             ))}

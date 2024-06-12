@@ -73,14 +73,14 @@ function ProductsPage() {
                                 </div>
                                 <ul className="grid grid-cols-2 gap-2">
                                     {categories.map((category) => (
-                                        <li key={category.categoryId} className='flex items-center gap-2'>
+                                        <li key={category.productCategoryId} className='flex items-center gap-2'>
                                             <Checkbox
-                                                value={category.categoryId}
+                                                value={category.productCategoryId}
                                                 onCheckedChange={(checked) => {
                                                     if (checked) {
-                                                        setSelectedCategories([...selectedCategories, category.categoryId]);
+                                                        setSelectedCategories([...selectedCategories, category.productCategoryId]);
                                                     } else {
-                                                        setSelectedCategories(selectedCategories.filter((id) => id !== category.categoryId));
+                                                        setSelectedCategories(selectedCategories.filter((id) => id !== category.productCategoryId));
                                                     }
                                                 }}
                                             />
