@@ -2,18 +2,29 @@
 
 import React, { useEffect } from 'react';
 import { Chart } from 'chart.js';
+import { cn } from '@/lib/utils';
 
-export default function LineChart() {
+interface LineChartProps {
+    datasets : {
+        label: string,
+        data: number[],
+        fill: boolean,
+        borderColor: string,
+        tension: number
+    }[],
+    labels: string[],
+    className?: string
+}
+
+const LineChart: React.FC<LineChartProps> = ({
+    datasets,
+    labels,
+    className
+}) => {
     //Create a dataset
     const data = {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-        datasets: [{
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            fill: false,
-            borderColor: 'rgb(75, 192, 192)',
-            tension: 0.1
-        }]
+        labels: labels,
+        datasets: datasets
     };
 
     //Create a chart
@@ -23,6 +34,11 @@ export default function LineChart() {
             type: 'line',
             data: data,
             options: {
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    }
+                },
                 scales: {
                     xAxes: [
                         {
@@ -39,7 +55,8 @@ export default function LineChart() {
                     yAxes: [
                         {
                             ticks: {
-                                beginAtZero: true
+                                beginAtZero: true,
+                                maxTicksLimit: 5
                             },
                             gridLines: {
                                 drawOnChartArea: false
@@ -54,8 +71,10 @@ export default function LineChart() {
 
     //Return the chart
     return (
-        <div>
+        <div className={cn('relative', className)}>
             <canvas id="myLineChart"></canvas>
         </div>
     )
 }
+
+export default LineChart;

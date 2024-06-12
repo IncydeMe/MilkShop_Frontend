@@ -1,7 +1,6 @@
 export type Voucher = {
-    id: number;
-    discount: number;
+    voucherId: string;
+    value: number;
     startDate: Date;
     expirationDate: Date;
-    description: string;
 }

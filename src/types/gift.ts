@@ -4,4 +4,5 @@ export type Gift = {
     point: number; //member points required to redeem the gift
     description: string;
     imageUrl: string;
+    quantity: number;
 }
