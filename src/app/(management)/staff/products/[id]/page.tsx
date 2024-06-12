@@ -29,7 +29,7 @@ const RatingToStars = ({ rating = 0 }: { rating?: number }) => {
 
 function ProductDetailsPage({params}: {params: {id: number}}) {
     const { product, loading, error } = useSingleProduct(params.id);
-    const { category } = useSingleCategory(product?.categoryId || 0);
+    const { category } = useSingleCategory(product?.productCategoryId || 0);
 
     if (error) {
         return <p>{error.message}</p>;
@@ -71,7 +71,7 @@ function ProductDetailsPage({params}: {params: {id: number}}) {
   }
 
     return (
-        <section className='p-10 flex flex-col gap-10'>
+        <section className='flex flex-col gap-10'>
             <section className='flex items-center gap-6'>
                 <Link href='/staff/products'><ChevronLeft size={36} /></Link>
                 <h1 className='text-[36px] font-bold underline underline-offset-2'>Chi tiết sản phẩm</h1>
@@ -127,7 +127,7 @@ function ProductDetailsPage({params}: {params: {id: number}}) {
                                 </span>
                                 <span>
                                   (Số lượt đánh giá hiện có: 
-                                  {product?.feedbacks.length}) 
+                                  {product?.feedbacks?.length}) 
                                 </span>
                             </div>
                         )
