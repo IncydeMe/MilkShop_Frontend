@@ -27,7 +27,7 @@ function ProductsPage() {
 
     useEffect(() => {
         setFilteredProducts(products.filter(product =>
-            (selectedCategories.length === 0 || selectedCategories.includes(product.categoryId)) &&
+            (selectedCategories.length === 0 || selectedCategories.includes(product.productCategoryId)) &&
             product.price >= value[0] && product.price <= value[1]
         ));
     }, [products, selectedCategories, value]);

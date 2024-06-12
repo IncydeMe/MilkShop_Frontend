@@ -30,6 +30,7 @@ import {
     DialogTrigger,
   } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
+import { Toaster, toast } from "sonner";
 
 
 function StaffProductListPage() {
@@ -58,13 +59,13 @@ function StaffProductListPage() {
                 badgeColor = 'green';
                 break;
             case 3:
-                badgeColor = 'yellow';
+                badgeColor = 'red';
                 break;
             case 4:
-                badgeColor = 'indigo';
+                badgeColor = 'pink';
                 break;
             case 5:
-                badgeColor = 'pink';
+                badgeColor = 'purple';
                 break;
             case 6: 
                 badgeColor = 'purple';
@@ -106,6 +107,7 @@ function StaffProductListPage() {
 
     return (
         <section className="flex flex-col">
+            <Toaster position="top-center"/>
             <div className="flex justify-between items-end mb-4">
                 <span>
                     <h1 className="text-[36px] font-semibold mb-2">Danh sách các sản phẩm trong kho</h1>
@@ -136,7 +138,7 @@ function StaffProductListPage() {
                                 <TableRow key={index} className={`${index % 2 != 0 ? 'bg-gray-200 hover:bg-gray-300/60': 'bg-white hover:bg-gray-100'}`}>
                                     <TableCell>{index + 1}</TableCell>
                                     <TableCell>{product.name}</TableCell>
-                                    <TableCell>{categoryBadge(product.categoryId)}</TableCell>
+                                    <TableCell>{categoryBadge(product.productCategoryId)}</TableCell>
                                     <TableCell>{product.quantity}</TableCell>
                                     <TableCell>{product.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</TableCell>
                                     <TableCell className="flex gap-4">
@@ -169,8 +171,9 @@ function StaffProductListPage() {
                                     <div className='flex gap-4'>
                                       <Button
                                         onClick={() =>{
-                                          deleteProduct(product?.productId || 0);
-                                          window.location.href = '/staff/products';
+                                            deleteProduct(product?.productId || 0);
+                                            toast.success('Xóa sản phẩm thành công!');
+                                            window.location.href ='/staff/products';
                                         }}
                                         variant="default" 
                                         className="bg-red-500 text-white hover:bg-red-600 rounded-[4px] flex gap-4 items-center">
