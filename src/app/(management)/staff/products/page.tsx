@@ -49,9 +49,9 @@ function StaffProductListPage() {
     const currentDate = `${currentDay}/${currentMonth}/${currentYear}, thời gian hiện tại: ${currentHour}:${currentMinute}`;
 
     const categoryBadge = (categoryId: number) => {
-        const category = categories.find(category => category.categoryId === categoryId);
+        const category = categories.find(category => category.productCategoryId === categoryId);
         let badgeColor = '';
-        switch (category?.categoryId) {
+        switch (category?.productCategoryId) {
             case 1:
                 badgeColor = 'blue';
                 break;
@@ -77,7 +77,9 @@ function StaffProductListPage() {
         return (
             <>
                 {
-                    category && <Badge className={`text-white bg-${badgeColor}-500 hover:bg-${badgeColor}-700`}>{category.categoryName}</Badge>
+                    category && <Badge className={`text-white bg-${badgeColor}-500 hover:bg-${badgeColor}-700`}>
+                        {category.categoryName}
+                    </Badge>
                 }
             </>
         )
@@ -155,21 +157,21 @@ function StaffProductListPage() {
                                             </Button>
                                         </Link>
                                         <Dialog>
-                                  <DialogTrigger>
+                                <DialogTrigger>
                                     <Button variant="default" className="bg-red-500 text-white hover:bg-red-600 rounded-[4px] flex gap-4 items-center">
                                         Xóa
                                         <Trash size={24} />
                                     </Button>
-                                  </DialogTrigger>
-                                  <DialogContent className='bg-white'>
+                                </DialogTrigger>
+                                <DialogContent className='bg-white'>
                                     <DialogHeader>
-                                      <DialogTitle>Xác nhận xóa sản phẩm</DialogTitle>
+                                    <DialogTitle>Xác nhận xóa sản phẩm</DialogTitle>
                                     </DialogHeader>
                                     <DialogDescription>
-                                      Bạn có chắc chắn muốn xóa sản phẩm này không?
+                                    Bạn có chắc chắn muốn xóa sản phẩm này không?
                                     </DialogDescription>
                                     <div className='flex gap-4'>
-                                      <Button
+                                    <Button
                                         onClick={() =>{
                                             deleteProduct(product?.productId || 0);
                                             toast.success('Xóa sản phẩm thành công!');
@@ -177,15 +179,15 @@ function StaffProductListPage() {
                                         }}
                                         variant="default" 
                                         className="bg-red-500 text-white hover:bg-red-600 rounded-[4px] flex gap-4 items-center">
-                                          Xác nhận
-                                      </Button>
-                                      <DialogClose asChild>
+                                        Xác nhận
+                                    </Button>
+                                    <DialogClose asChild>
                                         <Button variant="default" className="bg-gray-500 text-white hover:bg-gray-600 rounded-[4px] flex gap-4 items-center">
                                             Hủy
                                         </Button>
-                                      </DialogClose>
+                                    </DialogClose>
                                     </div>
-                                  </DialogContent>
+                                </DialogContent>
                                 </Dialog>
                                     </TableCell>
                                 </TableRow>

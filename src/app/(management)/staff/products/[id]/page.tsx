@@ -37,7 +37,7 @@ function ProductDetailsPage({params}: {params: {id: number}}) {
 
     const categoryBadge = () => {
       let badgeColor = '';
-      switch (category?.categoryId) {
+      switch (category?.productCategoryId) {
           case 1:
               badgeColor = 'blue';
               break;

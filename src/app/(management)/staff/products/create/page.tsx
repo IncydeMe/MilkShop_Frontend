@@ -83,6 +83,7 @@ function CreateProductPage() {
     try{
       createProduct(newProduct);
       toast.success("Thêm sản phẩm thành công");
+      window.location.href = '/staff/products';
     }
     catch(error){
       toast.error("Thêm sản phẩm thất bại");
@@ -149,7 +150,7 @@ function CreateProductPage() {
                         <SelectContent>
                           <SelectGroup>
                             {categories.map((category) => (
-                              <SelectItem key={category.categoryId} value={category.categoryName} className='bg-white focus:bg-gray-400'>
+                              <SelectItem key={category.productCategoryId} value={category.categoryName} className='bg-white focus:bg-gray-400'>
                                 {category.categoryName}
                               </SelectItem>
                             ))}

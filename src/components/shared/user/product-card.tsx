@@ -40,7 +40,7 @@ const ProductCard : React.FC<ProductCardProps> = ({
 }) => {
     const { loading } = useProduct();
     const { addProduct } = useCart();
-    const { category } = useSingleCategory(product.categoryId);
+    const { category } = useSingleCategory(product.productCategoryId);
     const { cart } = useCart();
     const [hoverState, setHoverState] = React.useState(false);
 
@@ -109,7 +109,7 @@ const ProductCard : React.FC<ProductCardProps> = ({
                     <div className='flex items-center gap-4'>
                         {/* Rating Points */}
                         <div className='flex gap-1'>
-                            {RtoS(product.totalRating)}
+                            {RtoS(product.totalRating || 0)}
                         </div>
                         <p className='text-[12px]'>{'(' + product.totalRating + ')'}</p>
                     </div>
