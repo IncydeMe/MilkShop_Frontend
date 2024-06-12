@@ -55,7 +55,8 @@ export default function BarChart(){
                     yAxes: [
                         {
                             ticks: {
-                                beginAtZero: true
+                                beginAtZero: true,
+                                maxTicksLimit: 4,
                             },
                             scaleLabel: {
                                 display: true,
@@ -75,8 +76,8 @@ export default function BarChart(){
 
     //Return the chart
     return (
-        <div>
-            <canvas id="myBarChart" height={"24vh"} width={"60vw"}></canvas>
+        <div className='relative h-[36vh] w-[36vw]'>
+            <canvas id="myBarChart"></canvas>
         </div>
     )
 }

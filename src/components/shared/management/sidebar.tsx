@@ -45,7 +45,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sections }) => {
   const [isExpanded, setIsExpanded] = useState(true);
 
   return (
-    <aside className={`w-${isExpanded ? '[270px]' : '[120px]'} max-w-[18rem] h-screen border-r-[1px] shadow-small`}>
+    <aside className={`w-${isExpanded ? '[270px]' : '[120px]'} max-w-[18rem] min-h-screen border-r-[1px] shadow-small`}>
       <div className='h-full px-3 py-4'>
         <div className='flex items-center justify-center gap-x-4 p-2 mb-4'>
           <Milk size={32}/>

@@ -2,27 +2,30 @@
 
 import React, { useEffect } from 'react';
 import { Chart } from 'chart.js';
+import { cn } from '@/lib/utils';
 
-export default function PieChart()  {
+interface PieChartProps {
+    datasets : {
+        label: string,
+        data: number[],
+        backgroundColor: string[],
+        borderColor: string[],
+        borderWidth: number
+    }[],
+    labels: string[],
+    className?: string
+}
+
+const PieChart: React.FC<PieChartProps> = ({
+    datasets,
+    labels,
+    className
+}) =>  {
     //Create a dataset
     const data = {
-        labels: ['Red', 'Blue', 'Yellow'],
-        datasets: [{
-            label: '# of Votes',
-            data: [12, 19, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)'
-            ],
-            borderWidth: 1
-        }]
-    };
+        labels: labels,
+        datasets: datasets
+    }
 
     //Create a chart
     useEffect(() => {
@@ -34,20 +37,21 @@ export default function PieChart()  {
                 responsive: true,
                 plugins: {
                   legend: {
-                    position: 'top',
+                    position: 'right',
                   },
                   title: {
                     display: true,
-                    text: 'Chart.js Pie Chart'
-                  }
+                    text: 'Category distribution'
+                  },
                 }
               },
         });
     }, []);
     //Return the chart
     return (
-        <div>
+        <div className={cn('relative', className)}>
             <canvas id="myPieChart"></canvas>
         </div>
     )
 }
+export default PieChart;

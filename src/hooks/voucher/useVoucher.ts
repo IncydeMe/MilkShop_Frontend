@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "@/lib/axios";
 import type { Voucher } from "../../types/voucher";
 
 //CRUD operations for vouchers
@@ -31,12 +31,12 @@ export const useVoucher = () => {
 };
 
 //Fetch a single voucher
-export const useSingleVoucher = (id: number) => {
+export const useSingleVoucher = (id: string) => {
     const [voucher, setVoucher] = useState<Voucher | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<Error | null>(null);
 
-    const fetchVoucher = async (id: number) => {
+    const fetchVoucher = async (id: string) => {
         try {
             const response = await axios.get<Voucher>(`/vouchers/${id}`);
             setVoucher(response.data);
@@ -66,14 +66,14 @@ export const createVoucher = async (voucher: Voucher) => {
 //Update a voucher
 export const updateVoucher = async (voucher: Voucher) => {
     try {
-        await axios.put(`/vouchers/${voucher.id}`, voucher);
+        await axios.put(`/vouchers/${voucher.voucherId}`, voucher);
     } catch (error : any) {
         throw new Error(error.message);
     }
 };
 
 //Delete a voucher
-export const deleteVoucher = async (id: number) => {
+export const deleteVoucher = async (id: string) => {
     try {
         await axios.delete(`/vouchers/${id}`);
     } catch (error : any) {

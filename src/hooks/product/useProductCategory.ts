@@ -32,9 +32,9 @@ export function useProductCategory() {
 
 //Fetch a single product category
 export const useSingleCategory = (id: number) => {
-    const [category, setCategory] = useState<ProductCategory | null>(null);
+    const [category, setCategory] = useState<ProductCategory>();
     const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<Error | null>(null);
+    const [error, setError] = useState<Error>();
 
     const fetchCategory = async (id: number) => {
         try {
