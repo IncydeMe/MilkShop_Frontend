@@ -19,6 +19,7 @@ import { Button } from '@/components/ui/button';
 import { Eye, ShoppingCart, Star } from 'lucide-react';
 import { useCart } from '@/hooks/cart/useCart';
 import Link from 'next/link';
+import TransitionLink from '@/components/transition-link';
 
 interface ProductCardProps {
     product: Product,

@@ -17,6 +17,7 @@ import SearchInput from "@/components/search";
 
 import { useCart } from "@/hooks/cart/useCart";
 import { CartProduct } from "@/types/cart";
+import TransitionLink from "@/components/transition-link";
 
 const generalNav = [
   { name: "Trang chủ", path: "/" },
@@ -137,9 +138,7 @@ const UserHeader: React.FC = () => {
             {generalNav.map((nav, index) => (
               <li key={index}>
                 <Link href={nav.path}>
-                  <Button className="bg-white rounded-[4px] text-black hover:bg-pink-400 hover:text-white transition-all ease-in-out duration-500">
-                    {nav.name}
-                  </Button>
+                  <TransitionLink href={nav.path} className="bg-white rounded-[4px] text-black hover:bg-pink-400 hover:text-white transition-all ease-in-out duration-500" label={nav.name}/>
                 </Link>
               </li>
             ))}
