@@ -22,7 +22,7 @@ const RatingToStars = ({ rating = 0 }: { rating?: number }) => {
 function ProductDetailsPage({params}: {params: {id: number}}) {
     const { product, loading, error } = useSingleProduct(params.id);
     const { products } = useProduct();
-    const { category } = useSingleCategory(product?.categoryId || 0);
+    const { category } = useSingleCategory(product?.productCategoryId || 0);
 
     console.log(category?.categoryName);
 
@@ -79,7 +79,7 @@ function ProductDetailsPage({params}: {params: {id: number}}) {
                         ) : (
                             <div className='flex items-center gap-4'>
                                 <RatingToStars rating={product?.totalRating} />
-                                <p>{product?.totalRating.toPrecision(1)}</p>
+                                <p>{product?.totalRating?.toPrecision(1)}</p>
                             </div>
                         )
                     }

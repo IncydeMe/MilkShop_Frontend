@@ -18,6 +18,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { ChevronRight, ChevronRightCircle } from "lucide-react";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import UserHeader from "@/components/shared/user/user-header";
@@ -50,7 +51,11 @@ export default function Home() {
   const randomCategories = categories.sort(() => Math.random() - 0.5).slice(0, 4);  
 
   return (
-    <main>
+    <motion.main
+      initial={{ y: 100, opacity: 0, overflowX: "hidden" }}
+      animate={{ y: 0, opacity: 1, overflowX: "hidden" }}
+      transition={{ type: "easeIn", duration: 0.5, delay: 1 }}
+    >
       <UserHeader />
       <section className="min-h-screen px-10 py-2">
         <Carousel className="w-[90%] mx-auto my-4">
@@ -206,6 +211,6 @@ export default function Home() {
         {/* Handling Loading State */}
       </section>
       <UserFooter />
-    </main>
+    </motion.main>
   );
 }

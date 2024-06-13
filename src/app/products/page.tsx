@@ -57,7 +57,7 @@ function ProductsPage() {
             {/* Filter Section */}
             <section className='flex flex-col justify-start gap-4'>
                 <h1 className='text-3xl font-bold'>Tất cả sản phẩm</h1>
-                <section className='flex flex-col gap-4 sticky top-[240px] left-10'>
+                <section className='flex flex-col gap-4 fixed top-[300px] left-10'>
                     <section className="col-span-1 mr-8">
                         <div className="w-[240px]">
                             <div className="flex justify-between items-center gap-10 mb-4">
