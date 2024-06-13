@@ -1,5 +1,5 @@
 "use client";
-import React from 'react'
+import React, { useEffect } from 'react'
 import { createProduct, useProduct } from '@/hooks/product/useProduct';
 import { useProductCategory } from '@/hooks/product/useProductCategory';
 import { Button, buttonVariants } from '@/components/ui/button';
@@ -13,12 +13,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import {
-  FileUploader,
-  FileInput,
-  FileUploaderContent,
-  FileUploaderItem
-} from "@/components/custom-file-input"
 import { Toaster, toast } from 'sonner';
 import { cn } from "@/lib/utils";
 
@@ -52,8 +46,20 @@ function UpdateProductPage({params} : {params: {id: number}}) {
   const { product, loading, error } = useSingleProduct(params.id);
 
   const router = useRouter();
-  //Debug
-  console.log(product?.name);
+  
+  // Update form values when product data is loaded
+  useEffect(() => {
+    if (product) {
+      form.reset({
+        productName: product.name,
+        productPrice: product.price.toString(),
+        productCategoryId: product.productCategoryId,
+        productDescription: product.description,
+        productImageSrc: product.imageUrl,
+        productQuantity: product.quantity.toString()
+      });
+    }
+  }, [product]);
 
   const form = useForm<zod.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -100,7 +106,7 @@ function UpdateProductPage({params} : {params: {id: number}}) {
   return (
     <div>
       <div className='flex gap-x-4 items-center'>
-        <ChevronLeft size={36} onClick={() => router.back()}/>
+        <ChevronLeft size={36} onClick={() => router.back()} className='cursor-pointer'/>
         <h1 className='text-[36px] font-bold'>Cập nhật sản phẩm</h1>
       </div>
       <Toaster position='top-center'/>
