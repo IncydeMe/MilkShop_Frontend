@@ -6,17 +6,16 @@ import { cn } from "@/lib/utils"
 
 interface Props extends ButtonProps{
   href: string
-  label?: string,
   className?: string
-  children?: React.ReactNode
 }
 
-const TransitionLink = ({ href, label, className, ...props}: Props) => {
+const TransitionLink = ({ href, className, ...props}: Props) => {
   const router = useRouter()
   const pathname = usePathname()
 
-  const handleClick = () => {
-    if (pathname !== href) {
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    if (pathname != href) {
       animatePageOut(href, router)
     }
   }
@@ -27,7 +26,7 @@ const TransitionLink = ({ href, label, className, ...props}: Props) => {
       onClick={handleClick}
       {...props}
     >
-      {label || props.children}
+      { props.children }
     </Button>
   )
 }
