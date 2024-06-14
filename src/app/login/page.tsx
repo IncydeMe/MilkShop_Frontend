@@ -1,5 +1,5 @@
 "use client";
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 //for form
@@ -33,14 +33,41 @@ const loginSchema = zod.object({
 
 function LoginPage() {
   const { login, loading, error } = useLogin();
+  const router = useRouter();
+  const [navLink, setNavLink] = useState<string>("");
 
   const loginForm = useForm<zod.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
   });
 
   const onSubmit = async (data: zod.infer<typeof loginSchema>) => {
-    console.log(data);
     login(data.email, data.password);
+
+    const account = sessionStorage.getItem("account");
+    if(account !== null) {
+      const parsedAccount = JSON.parse(account);
+
+      console.log(parsedAccount);
+
+      //Redirect depending on role
+      switch(parsedAccount.role) {
+        case "Admin":
+          setNavLink("/admin");
+          break;
+        case "Manager":
+          setNavLink("/manager");
+          break;
+        case "Staff":
+          setNavLink("/staff");
+          break;
+        case "Member":
+          setNavLink("/products");
+          break;
+        default:
+          setNavLink("/login");
+          break;
+      }
+    }
   };
 
   const handleSubmit = loginForm.handleSubmit(onSubmit);

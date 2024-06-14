@@ -14,8 +14,8 @@ export type Account = {
 export enum Role {
     ADMIN = "ADMIN",
     USER = "USER",
-    SELLER = "SELLER",
-    GUEST = "GUEST"
+    MANAGER = "MANAGER",
+    STAFF = "STAFF"
 }
 
 export type Address = {
