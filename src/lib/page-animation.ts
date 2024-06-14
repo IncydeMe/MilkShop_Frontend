@@ -12,11 +12,10 @@ export const animatePageIn = () => {
 
     tl.set([bannerOne, bannerTwo, bannerThree, bannerFour], {
       yPercent: 0,
-      overflowX: 'hidden',
     }).to([bannerOne, bannerTwo, bannerThree, bannerFour], {
       yPercent: 100,
       stagger: 0.2,
-      overflowX: 'hidden'
+      delay: 0.5,
     })
   }
 }
@@ -32,11 +31,10 @@ export const animatePageOut = (href: string, router: AppRouterInstance) => {
 
     tl.set([bannerOne, bannerTwo, bannerThree, bannerFour], {
       yPercent: -100,
-      overflowX: 'hidden',
     }).to([bannerOne, bannerTwo, bannerThree, bannerFour], {
       yPercent: 0,
       stagger: 0.2,
-      overflowX: 'hidden',
+      delay: 0.5,
       onComplete: () => {
         router.push(href)
       },

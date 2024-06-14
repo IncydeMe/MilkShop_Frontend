@@ -54,7 +54,7 @@ export default function Home() {
     <motion.main
       initial={{ y: 100, opacity: 0, overflowX: "hidden" }}
       animate={{ y: 0, opacity: 1, overflowX: "hidden" }}
-      transition={{ type: "easeIn", duration: 0.5, delay: 1 }}
+      transition={{ type: "easeIn", duration: 0.5, delay: 1.05 }}
     >
       <UserHeader />
       <section className="min-h-screen px-10 py-2">
