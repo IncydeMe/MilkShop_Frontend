@@ -158,7 +158,7 @@ const UserHeader: React.FC = () => {
           {/* User Navigation */}
           {/* Check if the sessionStorage has "account yet. If there is, open ul" */}
           {
-            sessionStorage.getItem("account") != null ? (
+            sessionStorage.getItem("token") != null ? (
               // If there is, open ul
               <ul className="flex gap-x-10 w-full">
             {userNav.map((nav, index) => (
@@ -183,7 +183,7 @@ const UserHeader: React.FC = () => {
                             >
                               <Link href={item.path} title={item.name} onClick={() => {
                                 if (item.name === "Đăng xuất") {
-                                  sessionStorage.removeItem("account");
+                                  sessionStorage.removeItem("token");
                                   router.push("/login");
                                 }
                               }}>

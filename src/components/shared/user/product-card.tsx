@@ -76,14 +76,17 @@ const ProductCard : React.FC<ProductCardProps> = ({
                                 transition={{ duration: 0.2 }}
                                 className='absolute top-0 left-0 w-full h-full rounded-[8px] bg-black bg-opacity-50 flex justify-center items-center'>
                                 <div className='flex flex-col items-center gap-4'>
-                                    <Button
-                                        onClick={handleAddToCart} 
-                                        className='bg-pink-500 text-white rounded-[4px] hover:bg-pink-600 transition-all ease-linear duration-300'>
-                                        <span className='flex items-center gap-4'>
-                                            <ShoppingCart size={20}/>
-                                            <p>Add to cart</p>
-                                        </span>
-                                    </Button>
+                                    {
+                                        sessionStorage.getItem('token') != null &&
+                                        <Button
+                                            onClick={handleAddToCart} 
+                                            className='bg-pink-500 text-white rounded-[4px] hover:bg-pink-600 transition-all ease-linear duration-300'>
+                                            <span className='flex items-center gap-4'>
+                                                <ShoppingCart size={20}/>
+                                                <p>Add to cart</p>
+                                            </span>
+                                        </Button>
+                                    }
                                     <Link href={'/products/'+product.productId}>
                                         <Button className='bg-purple-400 text-white rounded-[4px] hover:bg-purple-500 transition-all ease-linear duration-300'>
                                             <span className='flex items-center gap-4'>

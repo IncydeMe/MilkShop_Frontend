@@ -175,7 +175,7 @@ function CreateProductPage() {
       price: Number(productPrice),
       productCategoryId: productCategoryId,
       description: productDescription,
-      imageUrl: URL.createObjectURL(productImageSrc?.type === 'image/jpeg' ? productImageSrc : new File([], '')),
+      imageUrl: productImageSrc?.name || '',
       quantity: Number(productQuantity)
     }
 
@@ -216,7 +216,7 @@ function CreateProductPage() {
                       </FormControl>
                       <FormMessage />
                     </FormItem>
-                  )
+                  ) 
                 }}
               />
               {/* Product Price and Product Stock Field */}
@@ -286,6 +286,9 @@ function CreateProductPage() {
               control={form.control}
               name='productImageSrc'
               render={({ field }) => {
+                const handleFileUpload = (url: string) => {
+                  localStorage.getItem("image");
+                };
                 return (
                   <FormItem>
                     <FormLabel className='text-[16px] font-semibold'>Hình ảnh sản phẩm</FormLabel>

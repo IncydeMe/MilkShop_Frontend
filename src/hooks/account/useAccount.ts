@@ -32,25 +32,48 @@ export const useAccount = () => {
 };
 
 //Fetch a single account
-export const useSingleAccount = (id: number) => {
+
+export const useSingleAccount = async (id: number) => {
     const [account, setAccount] = useState<Account | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<Error | null>(null);
 
-    //Fetch a single account
-    const fetchAccount = async (id: number) => {
+    // Fetch a single account
+    const fetchAccount = async (accountId: number) => {
         try {
-            const response = await axios.get<Account>(`/accounts/${id}`);
+            const response = await axios.get<Account>(`/accounts/${accountId}`);
             setAccount(response.data);
-        } catch (error : any) {
-            setError(error.message);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                setError(error);
+            } else {
+                setError(new Error('An unknown error occurred'));
+            }
         } finally {
             setLoading(false);
         }
     };
 
     useEffect(() => {
-        fetchAccount(id);
+        const source = axios.CancelToken.source();
+
+        const fetchData = async () => {
+            try {
+                await fetchAccount(id);
+            } catch (error) {
+                if (axios.isCancel(error)) {
+                    console.log('Request canceled', error.message);
+                } else {
+                    throw error;
+                }
+            }
+        };
+
+        fetchData();
+
+        return () => {
+            source.cancel('Component unmounted: Canceling axios request');
+        };
     }, [id]);
 
     return { account, loading, error };

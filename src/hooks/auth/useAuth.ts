@@ -1,71 +1,56 @@
-"use client"
-
-import { useState, useEffect } from "react";
-import axios from '@/lib/axios';
-import { AuthenticatedUser } from "@/types/auth/authenticatedUser";
+import React from "react";
+import axios from "@/lib/axios";
+import { cookies } from "next/headers";
 import { useSingleAccount } from "../account/useAccount";
-import { useRouter } from "next/navigation";
-
-//Authentication hooks
-
-//Login
-//In backend, login requires email and password
-//And will return status (1 or -1) along with a token for Bearer
 
 export const useLogin = () => {
-    const [user, setUser] = useState<AuthenticatedUser | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<Error | null>(null);
-
-    const router = useRouter();
+    const [href, setHref] = React.useState<string>('');//Set the href to redirect after login
 
     const login = async (email: string, password: string) => {
-        try {
-            const response = await axios.post("/login?email="+email+"&password="+password);
-            if (response.data.status === 1) {
+        try{
+            //Call the Login API
+            const res = await axios.post('/login', null, { params: {email, password} })
+            //Get the status and its data
+            const { status, data } = res.data;
 
-                //Set token to local storage
-                localStorage.setItem("token", response.data.token);
+            //Check success-fail status
+            //Status = 1: Success
+            if(status === 1) {
+                //If success do 2 things
 
-                //Set user to state
-                const user = setUser({
-                    id: response.data.data.id,
-                    email: email,
-                    password: password,
-                    role: response.data.data.role
-                });
+                //1. Set the token to cookies
+                cookies().set('token', data.token);//Set the token to cookies
+                //2. Get the account info and set it to cookies
+                const { account } = await useSingleAccount(data.id); // Await the result of useSingleAccount
+                cookies().set('account', JSON.stringify(account));//Set the account info to cookies
 
-                //Header for axios
-                axios.defaults.headers.common["Authorization"] = `${response.data.token}`;
-                //Based on the user role, redirect to different page
-                sessionStorage.setItem("account", JSON.stringify(user));
-                switch(response.data.data.role) {
-                    case "Admin":
-                        router.push("/admin");
+                //3. Return the URL to redirect
+                switch(account?.role) {
+                    //ENum switch case
+                    case 'ADMIN':
+                        setHref('/admin');//Return Admin page
                         break;
-                    case "Member":
-                        router.push("/products");
+                    case 'MANAGER':
+                        setHref('/manager');//Return Manager page
                         break;
-                    case "Staff":
-                        router.push("/staff");
-                        break;
-                    case "Manager":
-                        router.push("/manager");
+                    case 'STAFF':
+                        setHref('/staff');//Return Manager page
                         break;
                     default:
-                        router.push("/login");
+                        setHref('/');//Return Manager page
                         break;
                 }
-                
-            } else {
-                throw new Error("Đăng nhập thất bại");
             }
-        } catch (error : any) {
-            setError(error.message);
-        } finally {
-            setLoading(false);
+            else {
+                window.alert('Login failed');//Alert for debugging
+            }
         }
-    };
+        catch(error: any) {
+            window.alert('Login failed' + error);//Alert for debugging
+            return false;
+        }
 
-    return { user, loading, error, login };
-};
+        //Return the URL to redirect
+        return href;
+    }
+}
