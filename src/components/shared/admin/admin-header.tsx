@@ -49,7 +49,9 @@ function AdminHeader({ children }: { children: React.ReactNode }) {
               {isOpen ? <SidebarClose /> : <List />}
             </button>
           </div>
-          <h3 className="pr-4 uppercase font-semibold text-[26px] text-pink-700">Cửa hàng sữa</h3>
+          <h3 className="pr-4 uppercase font-semibold text-[26px] text-pink-700">
+            Cửa hàng sữa
+          </h3>
         </section>
         <HeaderSearchInput />
         <nav>
@@ -74,7 +76,10 @@ function AdminHeader({ children }: { children: React.ReactNode }) {
                       ))}
                       <hr className="w-full" />
                       <li className="w-full">
-                        <Link href="/" className="flex items-center w-full rounded-[4px] hover:bg-pink-500 hover:text-white hover:font-semibold transition-all duration-300 p-2">
+                        <Link
+                          href="/"
+                          className="flex items-center w-full rounded-[4px] hover:bg-pink-500 hover:text-white hover:font-semibold transition-all duration-300 p-2"
+                        >
                           <LogOut size={20} />
                           <span className="pl-2">Đăng xuất</span>
                         </Link>
@@ -114,21 +119,17 @@ function AdminHeader({ children }: { children: React.ReactNode }) {
             <li className="w-full my-4 hover:bg-pink-300 hover:font-semibold rounded">
               <Link href="/admin" className="flex p-3">
                 <BarChart />
-                <span className="ml-4 text-xl flex">
-                  Thống kê
-                </span>
+                <span className="ml-4 text-xl flex">Thống kê</span>
               </Link>
             </li>
             <li className="w-full my-4 hover:bg-pink-300 hover:font-semibold rounded">
-              <Link href="/admin" className="flex p-3">
+              <Link href="/admin/account-management" className="flex p-3">
                 <Barcode />
-                <span className="ml-4 text-xl flex">
-                  Quản lý tài khoản
-                </span>
+                <span className="ml-4 text-xl flex">Quản lý tài khoản</span>
               </Link>
             </li>
             <li className="w-full my-4 hover:bg-pink-300 hover:font-semibold rounded">
-              <Link href="/admin" className="flex p-3">
+              <Link href="/admin/profile" className="flex p-3">
                 <Barcode />
                 <span className="ml-4 text-xl flex">
                   Black smith f*cking sh*t

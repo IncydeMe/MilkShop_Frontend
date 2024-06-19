@@ -2,13 +2,16 @@
 
 import React from "react";
 import { BarChart3, BarChartBig } from "lucide-react";
-import Chart from 'chart.js';
+import Chart from "chart.js";
+import BarChart from "@/components/shared/management/chart/bar";
 
 function AdminIndexPage() {
   React.useEffect(() => {
-    let canvasElement = document.getElementById("bar-chart") as HTMLCanvasElement;
+    let canvasElement = document.getElementById(
+      "bar-chart",
+    ) as HTMLCanvasElement;
     let ctx = canvasElement.getContext("2d");
-    
+
     let config = {
       type: "bar",
       data: {
@@ -104,9 +107,24 @@ function AdminIndexPage() {
         },
       },
     };
-    
+
     window.myBar = new Chart(ctx, config);
   }, []);
+
+  const revenueDatasets = [
+    {
+      datasets: [
+        {
+          label: "Doanh thu",
+          data: [1000000, 2000000, 3000000, 4000000, 5000000], // Mock data
+          backgroundColor: "rgba(255, 99, 132, 0.5)",
+          borderColor: "rgba(255, 99, 132, 1)",
+          borderWidth: 1,
+        },
+      ],
+      labels: ["Tuần 1", "Tuần 2", "Tuần 3", "Tuần 4", "Tuần 5"],
+    },
+  ];
 
   return (
     <>
@@ -152,8 +170,17 @@ function AdminIndexPage() {
           </div>
         </div>
         <div className="p-4 w-[1200px] h-[500px]">
-            <canvas id="bar-chart"></canvas>
+          <canvas id="bar-chart"></canvas>
         </div>
+        <section className="bg-white border-b-[2px] border-gray-500/15 shadow-lg mx-auto my-auto rounded-[8px]">
+          {/* Line chart for showcasing profit in the month */}
+          <h3 className="text-[20px] my-2 mx-4">Doanh thu cửa hàng</h3>
+          <BarChart
+            datasets={revenueDatasets[0].datasets}
+            labels={revenueDatasets[0].labels}
+            className="mt-4 w-[36vw] h-[37vh] p-2"
+          />
+        </section>
       </div>
     </>
   );
