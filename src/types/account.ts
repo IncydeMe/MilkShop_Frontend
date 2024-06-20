@@ -3,6 +3,7 @@ export type Account = {
     name: string;
     email: string;
     password: string;
+    phonenumber: string;
     role: Role;
     imageUrl: string;
     createdAt: Date;
