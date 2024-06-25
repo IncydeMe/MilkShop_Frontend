@@ -1,80 +1,100 @@
-"use client";
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+"use client"
+import React, { useState } from "react";
+import axios from "@/lib/axios";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import Link from "next/link";
 //for form
-import { useForm } from 'react-hook-form';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Textarea } from '@/components/ui/textarea';
-import * as zod from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { ChevronLeft, Minus, Paperclip, Plus } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { type AuthenticatedUser } from '@/types/auth/authenticatedUser';
-import GoogleButton from '@/components/shared/user/social-button/google';
-import { Checkbox } from '@/components/ui/checkbox';
-import Link from 'next/link';
-
-import { useLogin } from '@/hooks/auth/useAuth';
-
-//for video background
-import BackgroundVideo from '../public/video/BackgroundVideo.mp4';
+import { useForm } from "react-hook-form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import * as zod from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import GoogleButton from "@/components/shared/user/social-button/google";
+import { Checkbox } from "@/components/ui/checkbox";
 
 //for motion
-import { motion } from 'framer-motion';
-import TransitionLink from '@/components/transition-link';
+import { motion } from "framer-motion";
+import TransitionLink from "@/components/transition-link";
 
-import Loader from '../../../public/Eclipse@1x-1.0s-200px-200px.gif';
+import Cookies from "js-cookie";
+import { jwtDecode } from 'jwt-decode';
+import { useRouter } from "next/navigation";
 
 const loginSchema = zod.object({
-    email: zod.string().email({ message: 'Email không hợp lệ' }),
-    password: zod.string().min(6, { message: 'Mật khẩu phải chứa ít nhất 6 ký tự' }),
+  email: zod.string().email({ message: "Email không hợp lệ" }),
+  password: zod
+    .string()
+    .min(6, { message: "Mật khẩu phải chứa ít nhất 6 ký tự" }),
 });
 
-function LoginPage() {
-  const { login, loading, error } = useLogin();
-  const router = useRouter();
-  const [navLink, setNavLink] = useState<string>("");
-
+export default function LoginPage() {
   const loginForm = useForm<zod.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = async (data: zod.infer<typeof loginSchema>) => {
-    login(data.email, data.password);
+  const route = useRouter();
 
-    const account = sessionStorage.getItem("account");
-    if(account !== null) {
-      const parsedAccount = JSON.parse(account);
+  async function onSubmit(data: zod.infer<typeof loginSchema>) {
+      try{
+        loginSchema.parse(data);
 
-      console.log(parsedAccount);
+        const response = await axios.post('/login?email='+data.email+'&password='+data.password);
 
-      //Redirect depending on role
-      switch(parsedAccount.role) {
-        case "Admin":
-          setNavLink("/admin");
-          break;
-        case "Manager":
-          setNavLink("/manager");
-          break;
-        case "Staff":
-          setNavLink("/staff");
-          break;
-        case "Member":
-          setNavLink("/products");
-          break;
-        default:
-          setNavLink("/login");
-          break;
+        if (response.data.status === 1) {
+          const token = response.data.data;
+          const decoded = jwtDecode(token);
+    
+          // Store the token in cookies
+          Cookies.set('token', token, { secure: true, sameSite: 'strict' });
+    
+          // Optionally store additional data in sessionStorage/localStorage
+          sessionStorage.setItem('user', JSON.stringify({
+            email: decoded.Email,
+            role: decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"],
+          }));
+          // Redirect to the specific page
+          const userRole = decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+          if (userRole === 'Admin') {
+            route.push('/admin')
+          }
+          else if (userRole === 'Manager') {
+            route.push('/manager')
+          }
+          else if (userRole === 'Staff') {
+            route.push('/staff')
+          }
+          else if (userRole === 'Member') {
+            route.push('/')
+          }
+
+        } else {
+          // Handle error
+          console.error(response.data.message);
+        }
+      } catch(error) {
+        // Handle error
+        console.error(error);
       }
-    }
-  };
+  };  
 
   const handleSubmit = loginForm.handleSubmit(onSubmit);
 
   return (
     <div className="relative w-full h-screen flex items-center justify-center">
-      <video autoPlay muted loop className="absolute w-full h-full object-cover" onContextMenu={(e) => e.preventDefault()}>
+      <video
+        autoPlay
+        muted
+        loop
+        className="absolute w-full h-full object-cover"
+        onContextMenu={(e) => e.preventDefault()}
+      >
         <source src={"/videos/BackgroundVideo.mp4"} type="video/mp4" />
       </video>
       <div className="absolute w-full h-full bg-black bg-opacity-50"></div>
@@ -84,7 +104,7 @@ function LoginPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
-            transition={{ type: 'spring' , duration: 1 , delay: 1 }}
+            transition={{ type: "spring", duration: 1, delay: 1 }}
             onSubmit={handleSubmit}
             className="flex flex-col gap-4 w-[420px] h-fit z-[10] bg-white shadow-md rounded-[8px] p-10"
           >
@@ -159,7 +179,10 @@ function LoginPage() {
             <GoogleButton className="w-[36px] h-[36px]" />
             <div className="flex items-center justify-center gap-2">
               <p className="text-[14px]">Bạn chưa có tài khoản?</p>
-              <TransitionLink href="/signup" className="text-[14px] font-semibold underline text-gray-600">
+              <TransitionLink
+                href="/signup"
+                className="text-[14px] font-semibold underline text-gray-600"
+              >
                 <p>Đăng ký</p>
               </TransitionLink>
             </div>
@@ -169,5 +192,3 @@ function LoginPage() {
     </div>
   );
 }
-
-export default LoginPage

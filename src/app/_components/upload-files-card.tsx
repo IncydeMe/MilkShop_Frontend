@@ -15,7 +15,9 @@ interface UploadedFilesCardProps {
   uploadedFiles: UploadedFile[]
 }
 
-export function UploadedFilesCard({ uploadedFiles }: UploadedFilesCardProps) {
+export const UploadedFilesCard:React.FC<UploadedFilesCardProps> = ({ 
+  uploadedFiles,
+}: UploadedFilesCardProps) => {
   return (
     <Card>
       <CardHeader>
@@ -24,6 +26,7 @@ export function UploadedFilesCard({ uploadedFiles }: UploadedFilesCardProps) {
       </CardHeader>
       <CardContent>
         {uploadedFiles.length > 0 ? (
+          
           <ScrollArea className="pb-4">
             <div className="flex w-max space-x-2.5">
               {uploadedFiles.map((file) => (
@@ -33,7 +36,7 @@ export function UploadedFilesCard({ uploadedFiles }: UploadedFilesCardProps) {
                     alt={file.name}
                     fill
                     sizes="(min-width: 640px) 640px, 100vw"
-                    loading="lazy"
+                    loading="eager"
                     className="rounded-md object-cover"
                   />
                 </div>

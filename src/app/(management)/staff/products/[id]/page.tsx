@@ -35,6 +35,8 @@ function ProductDetailsPage({params}: {params: {id: number}}) {
         return <p>{error.message}</p>;
     }
 
+    console.log(product?.imageUrl);
+
     const categoryBadge = () => {
       let badgeColor = '';
       switch (category?.productCategoryId) {

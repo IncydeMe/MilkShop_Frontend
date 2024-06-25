@@ -56,7 +56,7 @@ function ProductsPage() {
         <main className='flex justify-between p-10'>
             {/* Filter Section */}
             <section className='flex flex-col justify-start gap-4'>
-                <h1 className='text-3xl font-bold'>Tất cả sản phẩm</h1>
+                <h1 className='text-lg font-bold w-full'>Tất cả sản phẩm</h1>
                 <section className='flex flex-col gap-4 fixed top-[300px] left-10'>
                     <section className="col-span-1 mr-8">
                         <div className="w-[240px]">
@@ -71,7 +71,7 @@ function ProductsPage() {
                                         Danh mục
                                     </h3>
                                 </div>
-                                <ul className="grid grid-cols-2 gap-2">
+                                <ul className="flex flex-col gap-2">
                                     {categories.map((category) => (
                                         <li key={category.productCategoryId} className='flex items-center gap-2'>
                                             <Checkbox
@@ -130,7 +130,7 @@ function ProductsPage() {
             <section className='flex flex-col'>
                 {loading && <p>Loading...</p>}
                 {error && <p>Error: {error.message}</p>}
-                <ul className='grid grid-cols-3 gap-6 p-4 w-full'>
+                <ul className='grid grid-cols-3 gap-6 p-2 w-full'>
                     {currentItems.map(product => (
                         <ProductCard key={product.productId} product={product} type='normal' />
                     ))}
