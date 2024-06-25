@@ -1,5 +1,5 @@
 import { link } from 'fs'
-import { Bell, Gift, LayoutTemplate, MessageCircleMore, Newspaper, Package, Package2, TicketPercent } from 'lucide-react'
+import { Bell, CircleUser, Gift, LayoutTemplate, LogOut, MessageCircleMore, Newspaper, Package, Package2, TicketPercent } from 'lucide-react'
 import { title } from 'process'
 import React from 'react'
 import Sidebar from '../sidebar'
@@ -70,6 +70,17 @@ const StaffSidebar = () => {
                     }
                 ]
             },
+            {
+                title: 'Tài khoản',
+                links: [
+                    {
+                        icon: CircleUser,
+                        link: '/staff/account',
+                        label: 'Tài khoản của bạn',
+                        isExpanded: true,
+                    }
+                ]
+            }
         ]}
 
     

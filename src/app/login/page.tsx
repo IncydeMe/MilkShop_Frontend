@@ -1,7 +1,9 @@
-"use client";
+"use client"
 import React, { useState } from "react";
+import axios from "@/lib/axios";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Link from "next/link";
 //for form
 import { useForm } from "react-hook-form";
 import {
@@ -12,24 +14,18 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Textarea } from "@/components/ui/textarea";
 import * as zod from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChevronLeft, Minus, Paperclip, Plus } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { type AuthenticatedUser } from "@/types/auth/authenticatedUser";
 import GoogleButton from "@/components/shared/user/social-button/google";
 import { Checkbox } from "@/components/ui/checkbox";
-import Link from "next/link";
-
-//for video background
-import BackgroundVideo from "../public/video/BackgroundVideo.mp4";
 
 //for motion
 import { motion } from "framer-motion";
 import TransitionLink from "@/components/transition-link";
 
-import Loader from "../../../public/Eclipse@1x-1.0s-200px-200px.gif";
+import Cookies from "js-cookie";
+import { jwtDecode } from 'jwt-decode';
+import { useRouter } from "next/navigation";
 
 const loginSchema = zod.object({
   email: zod.string().email({ message: "Email không hợp lệ" }),
@@ -38,17 +34,55 @@ const loginSchema = zod.object({
     .min(6, { message: "Mật khẩu phải chứa ít nhất 6 ký tự" }),
 });
 
-export default async function LoginPage() {
-  const router = useRouter();
-  const [navLink, setNavLink] = useState<string>("");
-
+export default function LoginPage() {
   const loginForm = useForm<zod.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = async (data: zod.infer<typeof loginSchema>) => {
+  const route = useRouter();
+
+  async function onSubmit(data: zod.infer<typeof loginSchema>) {
+      try{
+        loginSchema.parse(data);
+
+        const response = await axios.post('/login?email='+data.email+'&password='+data.password);
+
+        if (response.data.status === 1) {
+          const token = response.data.data;
+          const decoded = jwtDecode(token);
     
-  };
+          // Store the token in cookies
+          Cookies.set('token', token, { secure: true, sameSite: 'strict' });
+    
+          // Optionally store additional data in sessionStorage/localStorage
+          sessionStorage.setItem('user', JSON.stringify({
+            email: decoded.Email,
+            role: decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"],
+          }));
+          // Redirect to the specific page
+          const userRole = decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+          if (userRole === 'Admin') {
+            route.push('/admin')
+          }
+          else if (userRole === 'Manager') {
+            route.push('/manager')
+          }
+          else if (userRole === 'Staff') {
+            route.push('/staff')
+          }
+          else if (userRole === 'Member') {
+            route.push('/')
+          }
+
+        } else {
+          // Handle error
+          console.error(response.data.message);
+        }
+      } catch(error) {
+        // Handle error
+        console.error(error);
+      }
+  };  
 
   const handleSubmit = loginForm.handleSubmit(onSubmit);
 

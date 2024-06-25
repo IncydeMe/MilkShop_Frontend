@@ -11,7 +11,11 @@ import {
 import Link from "next/link";
 import React, { useState } from "react";
 
-import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
 
 import { Button } from "@/components/ui/button";
 import SearchInput from "@/components/search";
@@ -20,6 +24,8 @@ import { useCart } from "@/hooks/cart/useCart";
 import { CartProduct } from "@/types/cart";
 import TransitionLink from "@/components/transition-link";
 import { useRouter } from "next/navigation";
+
+import Cookies from "js-cookie";
 
 const generalNav = [
   { name: "Trang chủ", path: "/" },
@@ -48,7 +54,7 @@ const userNav = [
         name: "Đăng xuất",
         icon: <LogOut size={24} />,
         path: "/",
-      }
+      },
     ],
   },
   {
@@ -82,7 +88,10 @@ const CartItems = () => {
 
   const CartItem: React.FC<{ item: CartProduct }> = ({ item }) => {
     return (
-      <li key={item.product.productId} className="flex items-center justify-between w-full">
+      <li
+        key={item.product.productId}
+        className="flex items-center justify-between w-full"
+      >
         <img
           src={item.product.imageUrl}
           alt={item.product.name}
@@ -146,7 +155,10 @@ const UserHeader: React.FC = () => {
             {generalNav.map((nav, index) => (
               <li key={index}>
                 <Link href={nav.path}>
-                  <TransitionLink href={nav.path} className="bg-white rounded-[4px] text-black hover:bg-pink-400 hover:text-white transition-all ease-in-out duration-500" >
+                  <TransitionLink
+                    href={nav.path}
+                    className="bg-white rounded-[4px] text-black hover:bg-pink-400 hover:text-white transition-all ease-in-out duration-500"
+                  >
                     {nav.name}
                   </TransitionLink>
                 </Link>
@@ -157,74 +169,81 @@ const UserHeader: React.FC = () => {
         <nav>
           {/* User Navigation */}
           {/* Check if the sessionStorage has "account yet. If there is, open ul" */}
-          {
-            sessionStorage.getItem("token") != null ? (
-              // If there is, open ul
-              <ul className="flex gap-x-10 w-full">
-            {userNav.map((nav, index) => (
-              <li key={index} className="w-full">
-                {nav.isPopup ? (
-                  <Popover>
-                    <PopoverTrigger title={nav.name}>
+          {Cookies.get("token") != null ? (
+            // If there is, open ul
+            <ul className="flex gap-x-10 w-full">
+              {userNav.map((nav, index) => (
+                <li key={index} className="w-full">
+                  {nav.isPopup ? (
+                    <Popover>
+                      <PopoverTrigger title={nav.name}>
+                        <div className="cursor-pointer">{nav.icon}</div>
+                      </PopoverTrigger>
+                      <PopoverContent
+                        align="end"
+                        className="w-full bg-white rounded-[4px]"
+                      >
+                        <ul className="flex flex-col gap-4">
+                          {nav.name === "Giỏ hàng" ? (
+                            <CartItems />
+                          ) : (
+                            nav.popupItems?.map((item, index) => (
+                              <li
+                                key={index}
+                                className="flex flex-col items-start rounded-[4px] hover:bg-pink-500 hover:text-white transition-all ease-out duration-100"
+                              >
+                                <Link
+                                  href={item.path}
+                                  title={item.name}
+                                  onClick={() => {
+                                    if (item.name === "Đăng xuất") {
+                                      Cookies.remove('token');
+                                      router.push("/");
+                                    }
+                                  }}
+                                >
+                                  <Button className="w-full">
+                                    <span className="flex items-center gap-4">
+                                      {item.icon}
+                                      {item.name}
+                                    </span>
+                                  </Button>
+                                </Link>
+                              </li>
+                            ))
+                          )}
+                        </ul>
+                      </PopoverContent>
+                    </Popover>
+                  ) : (
+                    <Link href={nav.path} title={nav.name}>
                       <div className="cursor-pointer">{nav.icon}</div>
-                    </PopoverTrigger>
-                    <PopoverContent
-                      align="end"
-                      className="w-full bg-white rounded-[4px]"
-                    >
-                      <ul className="flex flex-col gap-4">
-                        {nav.name === "Giỏ hàng" ? (
-                          <CartItems />
-                        ) : (
-                          nav.popupItems?.map((item, index) => (
-                            <li
-                              key={index}
-                              className="flex flex-col items-start rounded-[4px] hover:bg-pink-500 hover:text-white transition-all ease-out duration-100"
-                            >
-                              <Link href={item.path} title={item.name} onClick={() => {
-                                if (item.name === "Đăng xuất") {
-                                  sessionStorage.removeItem("token");
-                                  router.push("/login");
-                                }
-                              }}>
-                                <Button className="w-full">
-                                  <span className="flex items-center gap-4">
-                                    {item.icon}
-                                    {item.name}
-                                  </span>
-                                </Button>
-                              </Link>
-                            </li>
-                          ))
-                        )}
-                      </ul>
-                    </PopoverContent>
-                  </Popover>
-                ) : (
-                  <Link href={nav.path} title={nav.name}>
-                    <div className="cursor-pointer">{nav.icon}</div>
-                  </Link>
-                )}
+                    </Link>
+                  )}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            //If there isn't, open Login and Register button
+            <ul className="flex gap-x-4 w-full">
+              <li>
+                <TransitionLink
+                  href="/login"
+                  className="bg-white rounded-[4px] text-black hover:bg-pink-400 hover:text-white transition-all ease-in-out duration-500"
+                >
+                  Đăng nhập
+                </TransitionLink>
               </li>
-            ))}
-              </ul>
-            ) : (
-              //If there isn't, open Login and Register button
-              <ul className="flex gap-x-4 w-full">
-                <li>
-                  <TransitionLink href="/login" className="bg-white rounded-[4px] text-black hover:bg-pink-400 hover:text-white transition-all ease-in-out duration-500" >
-                    Đăng nhập
-                  </TransitionLink>
-                </li>
-                <li>
-                  <TransitionLink href="/signup" className="bg-white rounded-[4px] text-black hover:bg-pink-400 hover:text-white transition-all ease-in-out duration-500" >
-                    Đăng ký
-                  </TransitionLink>
-                </li>
-              </ul>
-            )
-          }
-          
+              <li>
+                <TransitionLink
+                  href="/signup"
+                  className="bg-white rounded-[4px] text-black hover:bg-pink-400 hover:text-white transition-all ease-in-out duration-500"
+                >
+                  Đăng ký
+                </TransitionLink>
+              </li>
+            </ul>
+          )}
         </nav>
       </section>
       <SearchInput />
