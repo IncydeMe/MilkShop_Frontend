@@ -1,3 +1,4 @@
+// UserHeader.tsx
 "use client";
 import {
   BookUser,
@@ -7,6 +8,8 @@ import {
   ReceiptText,
   Gift,
   LogOut,
+  Plus,
+  Minus,
 } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -20,18 +23,43 @@ import {
 import { Button } from "@/components/ui/button";
 import SearchInput from "@/components/search";
 
-import { useCart } from "@/hooks/cart/useCart";
 import { CartProduct } from "@/types/cart";
 import TransitionLink from "@/components/transition-link";
 import { useRouter } from "next/navigation";
 
 import Cookies from "js-cookie";
 
+import { useCartStore } from "@/hooks/cart/useCartStore";
+import { Product } from "@/types/product";
+import { Input } from "@/components/ui/input";
+
+import Image from "next/image";
+import EmptyCartImage from "../../../../public/Empty.png";
+
 const generalNav = [
   { name: "Trang chủ", path: "/" },
   { name: "Sản phẩm", path: "/products" },
   { name: "Blogs", path: "/blog" },
 ];
+
+const ShoppingCart = () => {
+  const cart = useCartStore((state) => state.cart);
+  if(cart.length === 0) {
+    return(
+      <ShoppingCartIcon size={24} />
+    )
+  }
+  else {
+    return(
+      <div className="flex items-center justify-center relative">
+        <ShoppingCartIcon size={24} />
+        <span className="absolute -top-5 -right-4 bg-red-500 w-[22px] h-[22px] text-white text-xs rounded-[100px] p-1 flex justify-center">
+          <p className="my-auto">{cart.length}</p>
+        </span>
+      </div>
+    )
+  }
+}
 
 const userNav = [
   {
@@ -58,7 +86,7 @@ const userNav = [
     ],
   },
   {
-    icon: <ShoppingCartIcon size={24} />,
+    icon: <ShoppingCart />,
     name: "Giỏ hàng",
     path: "/user/cart",
     isPopup: true,
@@ -84,55 +112,78 @@ const userNav = [
 ];
 
 const CartItems = () => {
-  const { cart, isEmpty } = useCart();
+  const cart = useCartStore((state) => state.cart);
 
-  const CartItem: React.FC<{ item: CartProduct }> = ({ item }) => {
-    return (
-      <li
-        key={item.product.productId}
-        className="flex items-center justify-between w-full"
-      >
-        <img
-          src={item.product.imageUrl}
-          alt={item.product.name}
-          className="w-[60px] h-[60px] object-cover rounded-[4px]"
-        />
-        <div className="flex flex-col gap-2">
-          <p>{item.product.name}</p>
-          <p>
-            {item.quantity} x {item.product.price}đ
-          </p>
-        </div>
-      </li>
-    );
+  const handlePlus = (product: Product) => {
+    useCartStore.getState().addToCart(product);
   };
 
+  const handleMinus = (product: Product) => {
+    useCartStore.getState().decreaseQuantity(product.productId);
+  };
+
+  if (cart.length === 0) {
+    return (
+      <div className="flex flex-col justify-center gap-2">
+        <Image src={EmptyCartImage} alt="Empty Cart" className="w-[160px] h-[160px] object-cover mx-auto"/>
+        <p className="text-sm text-center">Giỏ hàng của bạn đang trống</p>
+      </div>
+    );
+  }
+
   return (
-    <li className="flex flex-col items-start rounded-[4px] hover:bg-pink-500 hover:text-white transition-all ease-out duration-100">
-      <Link href="/user/cart" title="Giỏ hàng">
-        <Button className="w-full">
-          <span className="flex items-center gap-4">
-            <ShoppingCartIcon size={24} />
-            Giỏ hàng
-          </span>
-        </Button>
-      </Link>
-      <ul className="flex flex-col gap-4">
-        {isEmpty ? (
-          <li className="text-center">Không có sản phẩm nào trong giỏ hàng</li>
-        ) : (
-          cart.products.map((item, index) => (
-            <CartItem key={index} item={item} />
-          ))
-        )}
-      </ul>
-    </li>
+    <>
+    <p>Giỏ hàng hiện tại (Số lượng: {cart.length} )</p>
+      {cart.map((product: Product, index: number) => (
+        <li key={index} className="flex max-w-[520px] items-center justify-between gap-4">
+          <div className="flex justify-start items-center gap-6">
+            <img
+              src={product.imageUrl}
+              alt={product.name}
+              className="w-[60px] h-[60px] object-cover rounded-[4px]"
+            />
+            <div className="flex flex-col gap-2">
+              <p className="text-sm">{product.name}</p>
+              <p className="text-sm">
+                {product.price.toLocaleString("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                })}
+              </p>
+            </div>
+          </div>
+          <div className="flex justify-between gap-x-2">
+            <div className="flex">
+              <Button variant={"outline"} size={"icon"} onClick={() => handleMinus(product)} className="bg-black text-white">
+                <Minus size={16} />
+              </Button>
+              <Input
+                type="number"
+                value={product.quantity}
+                readOnly
+                className="w-[60px] text-center"
+              />
+              <Button variant={"outline"} size={"icon"} onClick={() => handlePlus(product)} className="bg-black text-white">
+                <Plus size={16} />
+              </Button>
+            </div>
+          </div>
+        </li>
+      ))}
+      <Button>
+        <Link href="/user/cart">
+          Xem giỏ hàng
+        </Link>
+      </Button>
+    </>
   );
 };
 
 const UserHeader: React.FC = () => {
   const [openPopup, setOpenPopup] = useState<number | null>(null);
   const router = useRouter();
+
+  const totalItems = useCartStore((state) => state.totalItems);
 
   const handleMouseEnter = (index: number) => {
     setOpenPopup(index);
@@ -146,11 +197,9 @@ const UserHeader: React.FC = () => {
     <header className="w-full sticky top-0 z-10">
       <section className="bg-white flex justify-between items-center  px-10 py-6 border-b-[1px] border-gray-500/20 shadow-lg">
         <section className="flex items-center justify-between gap-10">
-          {/* Logo Brand */}
           <h3 className="uppercase font-bold text-[16px]">Cửa hàng sữa</h3>
         </section>
         <nav>
-          {/* General Navigation */}
           <ul className="flex gap-[60px] items-center">
             {generalNav.map((nav, index) => (
               <li key={index}>
@@ -167,10 +216,7 @@ const UserHeader: React.FC = () => {
           </ul>
         </nav>
         <nav>
-          {/* User Navigation */}
-          {/* Check if the sessionStorage has "account yet. If there is, open ul" */}
-          {Cookies.get("token") != null ? (
-            // If there is, open ul
+          {Cookies.get("token") != null && Cookies.get("token") !== "" ? (
             <ul className="flex gap-x-10 w-full">
               {userNav.map((nav, index) => (
                 <li key={index} className="w-full">
@@ -197,7 +243,7 @@ const UserHeader: React.FC = () => {
                                   title={item.name}
                                   onClick={() => {
                                     if (item.name === "Đăng xuất") {
-                                      Cookies.remove('token');
+                                      Cookies.remove("token");
                                       router.push("/");
                                     }
                                   }}
@@ -224,7 +270,6 @@ const UserHeader: React.FC = () => {
               ))}
             </ul>
           ) : (
-            //If there isn't, open Login and Register button
             <ul className="flex gap-x-4 w-full">
               <li>
                 <TransitionLink

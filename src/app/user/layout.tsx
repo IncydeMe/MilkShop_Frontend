@@ -3,6 +3,7 @@ import { Montserrat } from "next/font/google";
 import UserHeader from '@/components/shared/user/user-header'
 import UserFooter from '@/components/shared/user/user-footer'
 import { Metadata } from 'next';
+import { Toaster } from "@/components/ui/toaster"
 
 export const metadata: Metadata = {
     title: "Cửa hàng sữa - Người dùng",

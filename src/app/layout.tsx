@@ -3,10 +3,12 @@ import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 
+import { Toaster } from "@/components/ui/toaster"
+
 const montserrat = Montserrat({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Cửa hàng sữa - Next.js App",
+  title: "Cửa hàng sữa",
   description: "Cửa hàng sữa - Next.js App",
 };
 
@@ -18,7 +20,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn(montserrat.className, 'overflow-x-hidden')}>
-        {children}
+        <main>{children}</main>
+        <Toaster />
       </body>
     </html>
   );

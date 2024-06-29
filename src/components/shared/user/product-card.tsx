@@ -1,25 +1,26 @@
+// ProductCard.tsx
 "use client";
 
 import { Product } from '@/types/product'
 import React from 'react'
-
 import { SkeletonCard } from './skeleton-card'
 import { motion } from 'framer-motion';
-
+import Cookies from 'js-cookie';
 import {
     Card,
     CardContent,
     CardDescription,
     CardFooter,
     CardHeader,
-  } from "@/components/ui/card"
+} from "@/components/ui/card"
 import { useProduct } from '@/hooks/product/useProduct';
 import { useSingleCategory } from '@/hooks/product/useProductCategory';
 import { Button } from '@/components/ui/button';
 import { Eye, ShoppingCart, Star } from 'lucide-react';
-import { useCart } from '@/hooks/cart/useCart';
 import Link from 'next/link';
-import TransitionLink from '@/components/transition-link';
+import { useCartStore } from '@/hooks/cart/useCartStore';
+import { ToastAction } from "@/components/ui/toast"
+import { useToast } from "@/components/ui/use-toast"
 
 interface ProductCardProps {
     product: Product,
@@ -32,7 +33,6 @@ const RtoS = (rating: number) => {
         stars.push(<Star key={i} size={24} color='yellow'/>);
     }
     return stars;
-
 }
 
 const ProductCard : React.FC<ProductCardProps> = ({
@@ -40,15 +40,22 @@ const ProductCard : React.FC<ProductCardProps> = ({
     type
 }) => {
     const { loading } = useProduct();
-    const { addProduct } = useCart();
     const { category } = useSingleCategory(product.productCategoryId);
-    const { cart } = useCart();
     const [hoverState, setHoverState] = React.useState(false);
+    const { toast } = useToast();
 
     //Handle Add to Cart
     const handleAddToCart = () => {
-        addProduct(product);
-        console.log(JSON.stringify(cart));
+        const cartProduct = {
+            productId: product.productId,
+            quantity: 1,
+            price: product.price,
+            productCategoryId: product.productCategoryId,
+            description: product.description,
+            name: product.name,
+            imageUrl: product.imageUrl,
+        }
+        useCartStore.getState().addToCart(cartProduct);
     }
 
     const handleHoverState = () => {
@@ -77,21 +84,38 @@ const ProductCard : React.FC<ProductCardProps> = ({
                                 className='absolute top-0 left-0 w-full h-full rounded-[8px] bg-black bg-opacity-50 flex justify-center items-center'>
                                 <div className='flex flex-col items-center gap-4'>
                                     {
-                                        sessionStorage.getItem('token') != null &&
+                                        Cookies.get('token') != null &&
                                         <Button
-                                            onClick={handleAddToCart} 
-                                            className='bg-pink-500 text-white rounded-[4px] hover:bg-pink-600 transition-all ease-linear duration-300'>
+                                            onClick={ () => {
+                                                handleAddToCart();
+                                                toast({
+                                                    title: "Thêm vào giỏ hàng thành công",
+                                                    description: "Sản phẩm đã được thêm vào giỏ hàng",
+                                                    action: (
+                                                        <ToastAction
+                                                            altText='Xem giỏ hàng'
+                                                            className='bg-pink-500 text-white rounded-[4px] hover:bg-pink-700 transition-all ease-linear duration-300'
+                                                        >
+                                                            <Link href='/user/cart'>
+                                                                Xem giỏ hàng
+                                                            </Link>
+                                                        </ToastAction>
+                                                    )
+                                                })
+                                                }
+                                            } 
+                                            className='bg-pink-500 w-[160px] text-white rounded-[4px] hover:bg-pink-600 transition-all ease-linear duration-300'>
                                             <span className='flex items-center gap-4'>
                                                 <ShoppingCart size={20}/>
-                                                <p>Add to cart</p>
+                                                <p>Thêm vào giỏ</p>
                                             </span>
                                         </Button>
                                     }
                                     <Link href={'/products/'+product.productId}>
-                                        <Button className='bg-purple-400 text-white rounded-[4px] hover:bg-purple-500 transition-all ease-linear duration-300'>
+                                        <Button className='bg-purple-400 w-[160px] text-white rounded-[4px] hover:bg-purple-500 transition-all ease-linear duration-300'>
                                             <span className='flex items-center gap-4'>
                                                 <Eye size={20}/>
-                                                <p>View Details</p>
+                                                <p>Xem chi tiết</p>
                                             </span>
                                         </Button>
                                     </Link>
@@ -111,7 +135,6 @@ const ProductCard : React.FC<ProductCardProps> = ({
                 <CardFooter className='flex justify-between items-center'>
                     <p>{product.price.toLocaleString('vi-VN', {style : 'currency', currency : 'VND'})}</p>
                     <div className='flex items-center gap-4'>
-                        {/* Rating Points */}
                         <div className='flex gap-1'>
                             {RtoS(product.totalRating || 0)}
                         </div>

@@ -1,7 +1,6 @@
-"use client";
+"use client"
 
 import StaffSidebar from "@/components/shared/management/staff/staff-sidebar";
-import { cn } from "@/lib/utils";
 import { Montserrat } from "next/font/google";
 
 
