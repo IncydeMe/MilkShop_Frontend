@@ -1,7 +1,8 @@
 import {nextui} from '@nextui-org/theme';
 import type { Config } from "tailwindcss"
+import { withUt } from "uploadthing/tw";
 
-const config = {
+const config: Config = withUt({
   darkMode: ["class"],
   content: [
     "./pages/**/*.{ts,tsx}",
@@ -77,6 +78,6 @@ const config = {
     },
   },
   plugins: [require("tailwindcss-animate"),nextui()],
-} satisfies Config
+}) satisfies Config
 
 export default config

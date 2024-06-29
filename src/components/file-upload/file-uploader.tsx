@@ -236,7 +236,7 @@ export function FileUploader(props: FileUploaderProps) {
                     {maxFiles > 1
                       ? ` ${maxFiles === Infinity ? "multiple" : maxFiles}
                       tập tin (tối đa: ${formatBytes(maxSize)} mỗi hình)`
-                      : ` a file with ${formatBytes(maxSize)}`}
+                      : ` 1 tệp tối đa ${formatBytes(maxSize)}`}
                   </p>
                 </div>
               </div>

@@ -12,7 +12,8 @@ interface UseUploadFileProps
     UploadFilesOptions<OurFileRouter, keyof OurFileRouter>,
     "headers" | "onUploadBegin" | "onUploadProgress" | "skipPolling"
   > {
-  defaultUploadedFiles?: UploadedFile[]
+  defaultUploadedFiles?: UploadedFile[];
+  
 }
 
 export function useUploadFile(
