@@ -49,30 +49,26 @@ export default function LoginPage() {
 
         if (response.data.status === 1) {
           const token = response.data.data;
-          const decoded = jwtDecode(token);
+          const decoded = jwtDecode(token) as { [key: string]: string };
     
           // Store the token in cookies
           Cookies.set('token', token, { secure: true, sameSite: 'strict' });
     
           // Optionally store additional data in sessionStorage/localStorage
+          const userRole = decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
           sessionStorage.setItem('user', JSON.stringify({
             email: decoded.Email,
-            role: decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"],
+            role: userRole,
           }));
-          // Redirect to the specific page
-          const userRole = decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
-          if (userRole === 'Admin') {
-            route.push('/admin')
-          }
-          else if (userRole === 'Manager') {
-            route.push('/manager')
-          }
-          else if (userRole === 'Staff') {
-            route.push('/staff')
-          }
-          else if (userRole === 'Member') {
-            route.push('/')
-          }
+
+          const roleRouteMap: { [key: string]: string } = {
+            Admin: '/admin',
+            Manager: '/manager',
+            Staff: '/staff',
+            Member: '/'
+          };
+
+          route.push(roleRouteMap[userRole] || '/');
 
         } else {
           // Handle error

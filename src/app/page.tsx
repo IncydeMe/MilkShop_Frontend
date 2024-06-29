@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import { useProduct } from "../hooks/product/useProduct";
 
 import ProductCard from "@/components/shared/user/product-card";
@@ -8,7 +8,13 @@ import Image from "next/image";
 
 import CustomLoading from "../../public/Loading.jpg";
 
-import { Skeleton } from "@/components/ui/skeleton";
+//For Banner
+import Banner_1 from "../../public/Banner_1.jpg";
+import Banner_2 from "../../public/Banner_2.jpg";
+import Banner_3 from "../../public/Banner_3.jpg";
+import Banner_4 from "../../public/Banner_4.jpg";
+import Banner_5 from "../../public/Banner_5.jpg";
+
 import { SkeletonCard } from "@/components/shared/user/skeleton-card";
 import {
   Carousel,
@@ -25,30 +31,26 @@ import UserHeader from "@/components/shared/user/user-header";
 import UserFooter from "@/components/shared/user/user-footer";
 import { useProductCategory } from "@/hooks/product/useProductCategory";
 
+import Autoplay from "embla-carousel-autoplay";
+
 export default function Home() {
   const { products, error, loading } = useProduct();
   const { categories } = useProductCategory();
 
-  function renderCustomLoading() {
-    const customLoadingList = [];
-
-    for (let i = 0; i < 5; i++) {
-      customLoadingList.push(
-        <CarouselItem>
-          <Image
-            src={CustomLoading}
-            alt="Slide"
-            className="w-full h-[360px] rounded-[4px] object-cover"
-          />
-        </CarouselItem>
-      );
-    }
-
-    return customLoadingList;
-  }
-
   //Choose 4 random categories to display
-  const randomCategories = categories.sort(() => Math.random() - 0.5).slice(0, 4);  
+  const randomCategories = categories.sort(() => Math.random() - 0.5).slice(0, 4);
+  
+  const plugin = useRef(
+    Autoplay({ delay: 5000, stopOnInteraction: true})
+  );
+
+  const ImageBanners = [
+    Banner_1,
+    Banner_2,
+    Banner_3,
+    Banner_4,
+    Banner_5,
+  ]
 
   return (
     <motion.main
@@ -57,10 +59,20 @@ export default function Home() {
       transition={{ type: "easeIn", duration: 0.5, delay: 1.05 }}
     >
       <UserHeader />
-      <section className="min-h-screen px-10 py-2">
-        <Carousel className="w-[90%] mx-auto my-4">
-          <CarouselContent>{renderCustomLoading()}</CarouselContent>
+      <section className="min-h-screen mx-auto px-10 py-2">
+        <Carousel 
+          plugins={[plugin.current]}
+          className="w-full max-w-[90%] mx-auto rounded-[8px] shadow-md"
+          onMouseEnter={plugin.current.stop}
+          onMouseLeave={plugin.current.reset}>
           <CarouselPrevious />
+          <CarouselContent>
+            {ImageBanners.map((image) => (
+              <CarouselItem key={image.src}>
+                <Image src={image} alt="Banner" className="rounded-[8px] shadow-md h-[360px] w-full object-cover" />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
           <CarouselNext />
         </Carousel>
         {/* Handling Error State */}

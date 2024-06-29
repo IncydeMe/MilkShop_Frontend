@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import Cookies from "js-cookie";
 
 import {
   Popover,
@@ -74,7 +75,10 @@ function AdminHeader({ children }: { children: React.ReactNode }) {
                       ))}
                       <hr className="w-full" />
                       <li className="w-full">
-                        <Link href="/" className="flex items-center w-full rounded-[4px] hover:bg-pink-500 hover:text-white hover:font-semibold transition-all duration-300 p-2">
+                        <Link 
+                          href="/"
+                          onClick={() => Cookies.remove('token') } 
+                          className="flex items-center w-full rounded-[4px] hover:bg-pink-500 hover:text-white hover:font-semibold transition-all duration-300 p-2">
                           <LogOut size={20} />
                           <span className="pl-2">Đăng xuất</span>
                         </Link>

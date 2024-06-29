@@ -10,6 +10,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { useSingleCategory } from "@/hooks/product/useProductCategory";
 
+import Cookies from "js-cookie";
+
 const RatingToStars = ({ rating = 0 }: { rating?: number }) => {
   const stars = [];
   for (let i = 0; i < rating; i++) {
@@ -92,13 +94,13 @@ function ProductDetailsPage({ params }: { params: { id: number } }) {
               })}
             </p>
           )}
-          {sessionStorage.getItem('token') != null && (
+          {Cookies.get('token') != null && (
             <div className="flex justify-start items-center gap-8">
               <Button className="bg-purple-500 text-white px-4 py-2 rounded-[8px] hover:bg-purple-600 transition-all ease-linear duration-300">
-                Buy Now
+                Mua Ngay
               </Button>
               <Button className="border-[1px] border-pink-500 text-pink-500 px-4 py-2 rounded-[8px] hover:bg-pink-600 hover:text-white transition-all ease-linear duration-300">
-                Add to cart
+                Thêm vào giỏ hàng
               </Button>
             </div>
           )}
