@@ -175,13 +175,14 @@ function CreateProductPage() {
       price: Number(productPrice),
       productCategoryId: productCategoryId,
       description: productDescription,
-      imageUrl: productImageSrc?.name || '',
+      imageUrl: productImageSrc?.name || '' || sessionStorage.getItem('uploadedFileURL') || '',
       quantity: Number(productQuantity)
     }
 
     try{
       createProduct(newProduct);
       toast.success("Thêm sản phẩm thành công");
+      sessionStorage.removeItem('uploadedFileURL');
       window.location.href = '/staff/products';
     }
     catch(error){
@@ -286,9 +287,6 @@ function CreateProductPage() {
               control={form.control}
               name='productImageSrc'
               render={({ field }) => {
-                const handleFileUpload = (url: string) => {
-                  localStorage.getItem("image");
-                };
                 return (
                   <FormItem>
                     <FormLabel className='text-[16px] font-semibold'>Hình ảnh sản phẩm</FormLabel>
