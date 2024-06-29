@@ -6,6 +6,7 @@ import {
   Barcode,
   List,
   LogOut,
+  PersonStanding,
   SidebarClose,
   UserCircle2,
 } from "lucide-react";
@@ -99,7 +100,7 @@ function AdminHeader({ children }: { children: React.ReactNode }) {
       <div className="flex">
         <div
           className={`flex flex-col shrink-0 bg-pink-50 h-screen transition-all duration-300 z-10 ${
-            isOpen ? "w-72" : "w-0 overflow-hidden"
+            isOpen ? "w-72 md:w-96" : "w-0 overflow-hidden"
           }`}
         >
           <Link
@@ -129,16 +130,14 @@ function AdminHeader({ children }: { children: React.ReactNode }) {
               </Link>
             </li>
             <li className="w-full my-4 hover:bg-pink-300 hover:font-semibold rounded">
-              <Link href="/admin/profile" className="flex p-3">
-                <Barcode />
-                <span className="ml-4 text-xl flex">
-                  Black smith f*cking sh*t
-                </span>
+              <Link href="/admin/profile" className="flex p-3 items-center">
+                <PersonStanding />
+                <span className="ml-4 text-xl flex">Nguyễn Lê Nhật Trường</span>
               </Link>
             </li>
             <hr className="w-full" />
             <li className="w-full my-4 bg-pink-700 hover:bg-pink-800 hover:font-semibold rounded">
-              <Link href="/admin" className="flex p-3 text-white">
+              <Link href="/" className="flex p-3 text-white">
                 <LogOut />
                 <span className="flex ml-4 text-xl text-white">Đăng xuất</span>
               </Link>

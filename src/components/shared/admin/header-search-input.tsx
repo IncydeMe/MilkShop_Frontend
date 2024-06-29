@@ -20,7 +20,7 @@ const HeaderSearchInput: React.FC = () => {
         <section className='w-6/12'>
             <div className='flex items-center justify-between px-10'>
                 <div className='flex items-center w-full gap-4'>
-                    <Input placeholder='Tìm kiếm sản phẩm...' className='rounded-[4px]'/>
+                    <Input placeholder='Tìm kiếm...' className='rounded-[4px]'/>
                     <Button variant={'ghost'} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseEnter}
                         className='flex gap-x-2 items-center hover:bg-pink-500 hover:text-white transition-all ease-in-out duration-500 rounded-[60px]'>
                         <Search size='24' />
