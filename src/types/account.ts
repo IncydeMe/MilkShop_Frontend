@@ -9,6 +9,7 @@ export type Account = {
     imageUrl: string;
     createdAt: Date;
     updatedAt: Date;
+    dateOfBirth?: Date;
     disabled: boolean;
     address: string;
 }

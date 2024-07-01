@@ -73,6 +73,7 @@
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.51.5",
     "react-icon": "^1.0.0",
+    "react-phone-number-input": "^3.4.3",
     "react-resizable-panels": "^2.0.19",
     "react-spinner": "^0.2.7",
     "react-spinners": "^0.13.8",

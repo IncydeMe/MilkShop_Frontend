@@ -3,7 +3,6 @@
 import StaffSidebar from "@/components/shared/management/staff/staff-sidebar";
 import { Montserrat } from "next/font/google";
 
-
 const montserrat = Montserrat({ subsets: ["latin"] });
 
 export default function StaffLayout({

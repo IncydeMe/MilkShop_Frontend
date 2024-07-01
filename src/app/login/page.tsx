@@ -26,6 +26,7 @@ import TransitionLink from "@/components/transition-link";
 import Cookies from "js-cookie";
 import { jwtDecode } from 'jwt-decode';
 import { useRouter } from "next/navigation";
+import { ChevronLeft } from "lucide-react";
 
 const loginSchema = zod.object({
   email: zod.string().email({ message: "Email không hợp lệ" }),
@@ -94,6 +95,10 @@ export default function LoginPage() {
         <source src={"/videos/BackgroundVideo.mp4"} type="video/mp4" />
       </video>
       <div className="absolute w-full h-full bg-black bg-opacity-50"></div>
+      <span className="absolute top-4 left-0 flex items-center gap-2 cursor-pointer text-white bg-black px-2 py-1" onClick={() => route.back()}>
+          <ChevronLeft size={24}/>
+          <p>Quay lại</p>
+      </span>
       <section className="absolute inset-0 top-[20%] left-[36%]">
         <Form {...loginForm}>
           <motion.form
@@ -104,6 +109,7 @@ export default function LoginPage() {
             onSubmit={handleSubmit}
             className="flex flex-col gap-4 w-[420px] h-fit z-[10] bg-white shadow-md rounded-[8px] p-10"
           >
+            
             <h1 className="text-[24px] font-bold text-center">Đăng nhập</h1>
             <FormField
               control={loginForm.control}
@@ -149,11 +155,7 @@ export default function LoginPage() {
                 );
               }}
             />
-            <div className="flex justify-between items-center">
-              <div className="flex items-center gap-2">
-                <Checkbox />
-                <p className="text-[14px]">Ghi nhớ đăng nhập</p>
-              </div>
+            <div className="flex justify-end items-center">
               <Link
                 href="/forgot-password"
                 className="text-gray-600 underline text-[14px]"
