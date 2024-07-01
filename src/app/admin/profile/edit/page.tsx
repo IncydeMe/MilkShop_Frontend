@@ -1,15 +1,13 @@
 "use client";
 
 import React from "react";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { ChevronLeft } from "lucide-react";
-import { Toaster, toast } from "sonner";
 import * as zod from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ChevronLeft } from "lucide-react";
+import { Toaster } from "sonner";
+import { useRouter } from "next/navigation";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
@@ -26,10 +24,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Shell } from "@/components/file-upload/shell";
 import { BasicUploaderDemo } from "@/app/_components/uploader";
-import { Account, Role } from "@/types/account";
-import { createAccount } from "@/hooks/account/useAccount";
 
 const formSchema = zod.object({
   // Object for form validation
@@ -41,106 +39,87 @@ const formSchema = zod.object({
     .string()
     .email({ message: "Email không hợp lệ" })
     .min(1, { message: "Email không được để trống" }),
-  password: zod
-    .string()
-    .min(6, { message: "Mật khẩu phải chứa ít nhất 6 ký tự" }),
   phoneNumber: zod
     .string()
     .min(1, { message: "Số điện thoại không được để trống" })
-    .max(10, { message: "Số điện thoại không hợp lệ" }),
+    .max(10, { message: "Số điện thoại không được quá 10 số" }),
   dateOfBirth: zod.string(),
   gender: zod.string(),
   role: zod.string(),
   imageUrl: zod.instanceof(File).optional(),
   address: zod.object({
     street: zod.string().min(1, { message: "Địa chỉ không được để trống" }),
-    state: zod.string().min(1, { message: "Quận không được để trống " }),
-    city: zod.string().min(1, { message: "Thành phố không được để trống" }),
+    state: zod.string().min(1, { message: "Quận/Huyện không được để trống" }),
+    city: zod
+      .string()
+      .min(1, { message: "Tỉnh/Thành phố không được để trống" }),
     country: zod.string().min(1, { message: "Quốc gia không được để trống" }),
     zipCode: zod.string(),
   }),
 });
 
-function CreateAccountPage() {
+function AdminProfileEditPage() {
   const form = useForm<zod.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      email: "",
-      password: "123456",
-      phoneNumber: "",
-      dateOfBirth: "",
-      gender: "",
-      role: Role.USER,
+      name: "Nguyễn Lê Nhật Trường",
+      email: "truongnlnde160015@fpt.edu.vn",
+      phoneNumber: "0982362591",
+      dateOfBirth: "2000-01-10",
+      gender: "Male",
+      role: "Admin",
       imageUrl: undefined,
       address: {
-        street: "",
-        state: "",
-        city: "",
-        country: "",
-        zipCode: "",
+        street: "12H, High Tech Street",
+        state: "District 9",
+        city: "Ho Chi Minh City",
+        country: "Viet Nam",
+        zipCode: "773000",
       },
     },
   });
 
   const router = useRouter();
 
-  const onSubmit = () => {
-    // const {
-    //   name,
-    //   email,
-    //   password,
-    //   phoneNumber,
-    //   role,
-    //   imageUrl,
-    //   address,
-    // } = form.getValues();
-
-    // const newAccount: Account = {
-    // id: 0,
-    // name: name,
-    // email: email,
-    // password: password,
-    // phonenumber: phoneNumber,
-    // role: Role.USER,
-    // imageUrl: imageUrl,
-    // createdAt: new Date(),
-    // updatedAt: new Date(),
-    // disabled: false,
-    // address: {
-    //   street: address.street,
-    //   city: address.city,
-    //   state: address.state,
-    //   country: address.country,
-    //   zipCode: address.zipCode,
-    // },
-    // };
-
-    try {
-      // createAccount(newAccount);
-      toast.success("Tạo tài khoản thành công!");
-      window.location.href = "/admin/account-management";
-    } catch (error) {
-      toast.error("Có lỗi xảy ra khi tạo tài khoản!");
-    }
-  };
-
   return (
-    <main>
-      <span className="flex items-center gap-4">
-        <ChevronLeft
-          size={36}
-          onClick={() => router.back()}
-          className="cursor-pointer"
-        />
-        <h1 className="text-2xl font-bold">Tạo tài khoản mới</h1>
-      </span>
+    <>
+      <section className="flex items-center gap-4">
+        <ChevronLeft size={38} className="cursor-pointer" onClick={() => router.back()} />
+        <h1 className="uppercase text-3xl font-bold underline underline-offset-4 m-4 cursor-pointer" onClick={() => router.back()}>
+          Chỉnh sửa thông tin cá nhân
+        </h1>
+      </section>
       <Toaster position="top-center" />
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(onSubmit)}
+          onSubmit={form.handleSubmit((data) => console.log(data))}
           className="w-full flex flex-col gap-6 mt-5 items-center"
         >
+          <FormField
+            control={form.control}
+            name="imageUrl"
+            render={({ field }) => {
+              return (
+                <FormItem className="w-full mt-3">
+                  <FormLabel
+                    htmlFor="imageUrl"
+                    className="text-xl font-semibold block text-center"
+                  >
+                    Chọn ảnh đại diện cho bạn
+                  </FormLabel>
+                  <FormControl>
+                    <Shell>
+                      <BasicUploaderDemo />
+                    </Shell>
+                  </FormControl>
+                  <FormMessage>
+                    {form.formState.errors.imageUrl?.message}
+                  </FormMessage>
+                </FormItem>
+              );
+            }}
+          />
+
           <div className="w-full flex gap-6">
             <FormField
               control={form.control}
@@ -148,16 +127,13 @@ function CreateAccountPage() {
               render={({ field }) => {
                 return (
                   <FormItem className="w-1/2">
-                    <FormLabel
-                      className="text-[20px] font-semibold"
-                      htmlFor="accountName"
-                    >
-                      Tên tài khoản
+                    <FormLabel htmlFor="name" className="text-xl font-semibold">
+                      Tên
                     </FormLabel>
                     <FormControl>
                       <Input
-                        id="accountName"
                         type="text"
+                        id="name"
                         className="rounded-[4px]"
                         {...field}
                       />
@@ -176,15 +152,15 @@ function CreateAccountPage() {
                 return (
                   <FormItem className="w-1/2">
                     <FormLabel
-                      className="text-[20px] font-semibold"
                       htmlFor="email"
+                      className="text-xl font-semibold"
                     >
                       Email
                     </FormLabel>
                     <FormControl>
                       <Input
-                        id="email"
                         type="email"
+                        id="email"
                         className="rounded-[4px]"
                         {...field}
                       />
@@ -200,49 +176,21 @@ function CreateAccountPage() {
           <div className="w-full flex gap-6">
             <FormField
               control={form.control}
-              name="password"
-              render={({ field }) => {
-                return (
-                  <FormItem className="w-1/2">
-                    <FormLabel
-                      className="text-[20px] font-semibold"
-                      htmlFor="password"
-                    >
-                      Mật khẩu <span className="text-sm text-indigo-600">(Mặc định: 123456)</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        id="password"
-                        type="password"
-                        className="rounded-[4px]"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage>
-                      {form.formState.errors.password?.message}
-                    </FormMessage>
-                  </FormItem>
-                );
-              }}
-            />
-            <FormField
-              control={form.control}
               name="phoneNumber"
               render={({ field }) => {
                 return (
                   <FormItem className="w-1/2">
                     <FormLabel
-                      className="text-[20px] font-semibold"
                       htmlFor="phoneNumber"
+                      className="text-xl font-semibold"
                     >
                       Số điện thoại
                     </FormLabel>
                     <FormControl>
                       <Input
-                        id="phoneNumber"
                         type="text"
+                        id="phoneNumber"
                         className="rounded-[4px]"
-                        maxLength={10}
                         {...field}
                       />
                     </FormControl>
@@ -253,8 +201,6 @@ function CreateAccountPage() {
                 );
               }}
             />
-          </div>
-          <div className="w-full flex gap-6">
             <FormField
               control={form.control}
               name="dateOfBirth"
@@ -262,15 +208,15 @@ function CreateAccountPage() {
                 return (
                   <FormItem className="w-1/2">
                     <FormLabel
-                      className="text-[20px] font-semibold"
                       htmlFor="dateOfBirth"
+                      className="text-xl font-semibold"
                     >
                       Ngày tháng năm sinh
                     </FormLabel>
                     <FormControl>
                       <Input
-                        id="dateOfBirth"
                         type="date"
+                        id="dateOfBirth"
                         className="rounded-[4px]"
                         {...field}
                       />
@@ -282,20 +228,22 @@ function CreateAccountPage() {
                 );
               }}
             />
+          </div>
+          <div className="w-full flex gap-6">
             <FormField
               control={form.control}
               name="gender"
               render={({ field }) => {
                 return (
-                  <FormItem className="w-full">
+                  <FormItem className="w-1/2">
                     <FormLabel
-                      className="text-[20px] font-semibold"
                       htmlFor="gender"
+                      className="text-xl font-semibold"
                     >
                       Giới tính
                     </FormLabel>
                     <FormControl>
-                      <Select>
+                      <Select defaultValue="Male">
                         <SelectTrigger className="w-full rounded-[4px] text-lg">
                           <SelectValue placeholder="Chọn giới tính" />
                         </SelectTrigger>
@@ -303,13 +251,13 @@ function CreateAccountPage() {
                           <SelectGroup>
                             <SelectItem
                               value="Male"
-                              className="bg-white focus:bg-gray-400 text-base"
+                              className="bg-white focus:bg-gray-400 text-lg"
                             >
                               Nam
                             </SelectItem>
                             <SelectItem
                               value="Female"
-                              className="bg-white focus:bg-gray-400 text-base"
+                              className="bg-white focus:bg-gray-400 text-lg"
                             >
                               Nữ
                             </SelectItem>
@@ -317,6 +265,9 @@ function CreateAccountPage() {
                         </SelectContent>
                       </Select>
                     </FormControl>
+                    <FormMessage>
+                      {form.formState.errors.gender?.message}
+                    </FormMessage>
                   </FormItem>
                 );
               }}
@@ -326,35 +277,32 @@ function CreateAccountPage() {
               name="role"
               render={({ field }) => {
                 return (
-                  <FormItem className="w-full">
-                    <FormLabel
-                      className="text-[20px] font-semibold"
-                      htmlFor="role"
-                    >
-                      Role
+                  <FormItem className="w-1/2">
+                    <FormLabel htmlFor="role" className="text-xl font-semibold">
+                      Vai trò
                     </FormLabel>
                     <FormControl>
-                      <Select>
+                      <Select disabled defaultValue="Admin">
                         <SelectTrigger className="w-full rounded-[4px] text-lg">
-                          <SelectValue placeholder="Chọn role cho tài khoản" />
+                          <SelectValue placeholder="Chọn vai trò cho tài khoản" />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectGroup>
                             <SelectItem
                               value="Admin"
-                              className="bg-white focus:bg-gray-400 text-base"
+                              className="bg-white focus:bg-gray-400 text-lg"
                             >
                               Quản trị viên
                             </SelectItem>
                             <SelectItem
-                              value="Staff"
-                              className="bg-white focus:bg-gray-400 text-base"
+                              value="User"
+                              className="bg-white focus:bg-gray-400 text-lg"
                             >
                               Nhân viên
                             </SelectItem>
                             <SelectItem
-                              value="Member"
-                              className="bg-white focus:bg-gray-400 text-base"
+                              value="User"
+                              className="bg-white focus:bg-gray-400 text-lg"
                             >
                               Thành viên
                             </SelectItem>
@@ -370,7 +318,7 @@ function CreateAccountPage() {
               }}
             />
           </div>
-          <hr className="h-[2px] w-full" />
+          <hr className="w-full h-[2px]" />
           <div className="w-full flex gap-6">
             <FormField
               control={form.control}
@@ -379,17 +327,17 @@ function CreateAccountPage() {
                 return (
                   <FormItem className="w-1/2">
                     <FormLabel
-                      className="text-[20px] font-semibold"
                       htmlFor="address.street"
+                      className="text-xl font-semibold"
                     >
-                      Số nhà, đường
+                      Địa chỉ
                     </FormLabel>
                     <FormControl>
                       <Input
-                        id="address.street"
                         type="text"
-                        {...field}
+                        id="address.street"
                         className="rounded-[4px]"
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage>
@@ -406,17 +354,17 @@ function CreateAccountPage() {
                 return (
                   <FormItem className="w-1/2">
                     <FormLabel
-                      className="text-[20px] font-semibold"
                       htmlFor="address.state"
+                      className="text-xl font-semibold"
                     >
-                      Quận / Huyện
+                      Quận/Huyện
                     </FormLabel>
                     <FormControl>
                       <Input
-                        id="address.state"
                         type="text"
-                        {...field}
+                        id="address.state"
                         className="rounded-[4px]"
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage>
@@ -435,17 +383,17 @@ function CreateAccountPage() {
                 return (
                   <FormItem className="w-2/5">
                     <FormLabel
-                      className="text-[20px] font-semibold"
                       htmlFor="address.city"
+                      className="text-xl font-semibold"
                     >
-                      Thành phố / Tỉnh
+                      Tỉnh/Thành phố
                     </FormLabel>
                     <FormControl>
                       <Input
-                        id="address.city"
                         type="text"
-                        {...field}
+                        id="address.city"
                         className="rounded-[4px]"
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage>
@@ -462,17 +410,17 @@ function CreateAccountPage() {
                 return (
                   <FormItem className="w-2/5">
                     <FormLabel
-                      className="text-[20px] font-semibold"
                       htmlFor="address.country"
+                      className="text-xl font-semibold"
                     >
                       Quốc gia
                     </FormLabel>
                     <FormControl>
                       <Input
-                        id="address.country"
                         type="text"
-                        {...field}
+                        id="address.country"
                         className="rounded-[4px]"
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage>
@@ -489,17 +437,17 @@ function CreateAccountPage() {
                 return (
                   <FormItem className="w-2/5">
                     <FormLabel
-                      className="text-[20px] font-semibold"
                       htmlFor="address.zipCode"
+                      className="text-xl font-semibold"
                     >
-                      Zip code
+                      Mã bưu điện
                     </FormLabel>
                     <FormControl>
                       <Input
-                        id="address.zipCode"
                         type="text"
-                        {...field}
+                        id="address.zipCode"
                         className="rounded-[4px]"
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage>
@@ -510,42 +458,19 @@ function CreateAccountPage() {
               }}
             />
           </div>
-          <hr className="h-[2px] w-full" />
-          <FormField
-            control={form.control}
-            name="imageUrl"
-            render={({ field }) => {
-              return (
-                <FormItem className="w-full mt-3">
-                  <FormLabel
-                    className="text-[20px] font-semibold block text-center"
-                    htmlFor="imageUrl"
-                  >
-                    Chọn ảnh đại diện
-                  </FormLabel>
-                  <FormControl>
-                    <Shell>
-                      <BasicUploaderDemo />
-                    </Shell>
-                  </FormControl>
-                  <FormMessage>
-                    {form.formState.errors.imageUrl?.message}
-                  </FormMessage>
-                </FormItem>
-              );
-            }}
-          />
-          <Button
-            variant={"default"}
-            type="submit"
-            className="bg-pink-500 hover:bg-pink-600 text-white rounded-[4px] w-1/2 flex items-center"
-          >
-            Tạo mới
-          </Button>
+          <div className="w-full flex flex-col items-center mt-[30px]">
+            <Button
+              variant={"default"}
+              type="submit"
+              className="bg-pink-500 hover:bg-pink-600 text-white rounded-[4px] w-2/5"
+            >
+              Chỉnh sửa
+            </Button>
+          </div>
         </form>
       </Form>
-    </main>
+    </>
   );
 }
 
-export default CreateAccountPage;
+export default AdminProfileEditPage;
