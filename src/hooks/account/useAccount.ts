@@ -1,18 +1,23 @@
 "use client"
 
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axios from '@/lib/axios';
 import type { Account } from "../../types/account";
 
 //CRUD operations for accounts
 
-//Fetch all accounts
+/**
+ * Get all accounts from the API
+ * @returns all accounts, loading state, and error state
+ */
 export const useAccount = () => {
     const [accounts, setAccounts] = useState<Account[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<Error | null>(null);
 
-    //Fetch all accounts
+    /**
+     * Fetch all accounts from the API
+     */
     const fetchAccounts = async () => {
         try {
             const response = await axios.get<Account[]>("/accounts");
@@ -31,8 +36,11 @@ export const useAccount = () => {
     return { accounts, loading, error };
 };
 
-//Fetch a single account
-
+/**
+ * Fetch a single account from the API by user id
+ * @param user id 
+ * @returns account, loading state, and error state
+ */
 export const useSingleAccount = async (id: number) => {
     const [account, setAccount] = useState<Account | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
@@ -54,27 +62,38 @@ export const useSingleAccount = async (id: number) => {
         }
     };
 
-    useEffect(() => {
-        const source = axios.CancelToken.source();
+    return { account, loading, error };
+};
 
-        const fetchData = async () => {
-            try {
-                await fetchAccount(id);
-            } catch (error) {
-                if (axios.isCancel(error)) {
-                    console.log('Request canceled', error.message);
-                } else {
-                    throw error;
-                }
+/**
+ * Fetch a single account from the API by user email
+ * @param user email
+ * @returns account, loading state, and error state
+ */
+export const useSingleAccountByEmail = (email: string) => {
+    const [account, setAccount] = useState<Account | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<Error | null>(null);
+
+    // Fetch a single account
+    const fetchAccount = async (accountEmail: string) => {
+        try {
+            const response = await axios.get<Account>(`/accounts/${accountEmail}/info`);
+            setAccount(response.data);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                setError(error);
+            } else {
+                setError(new Error('An unknown error occurred'));
             }
-        };
+        } finally {
+            setLoading(false);
+        }
+    };
 
-        fetchData();
-
-        return () => {
-            source.cancel('Component unmounted: Canceling axios request');
-        };
-    }, [id]);
+    useEffect(() => {
+        fetchAccount(email);
+    }, [email]);
 
     return { account, loading, error };
 };
