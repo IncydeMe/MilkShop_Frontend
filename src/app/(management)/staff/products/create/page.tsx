@@ -175,7 +175,7 @@ function CreateProductPage() {
       price: Number(productPrice),
       productCategoryId: productCategoryId,
       description: productDescription,
-      imageUrl: productImageSrc?.name || '' || sessionStorage.getItem('uploadedFileURL') || '',
+      imageUrl: sessionStorage.getItem('uploadedFileURL') || "",
       quantity: Number(productQuantity)
     }
 

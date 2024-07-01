@@ -1,6 +1,7 @@
 export type Account = {
     id: number;
     name: string;
+    fullName?: string;
     email: string;
     password: string;
     phonenumber: string;
