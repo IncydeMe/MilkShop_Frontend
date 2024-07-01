@@ -4,13 +4,13 @@ export type Account = {
     fullName?: string;
     email: string;
     password: string;
-    phonenumber: string;
+    phone: string;
     role: Role;
     imageUrl: string;
     createdAt: Date;
     updatedAt: Date;
     disabled: boolean;
-    address: Address;
+    address: string;
 }
 
 export enum Role {
@@ -18,12 +18,4 @@ export enum Role {
     USER = "USER",
     MANAGER = "MANAGER",
     STAFF = "STAFF"
-}
-
-export type Address = {
-    street: string;
-    city: string;
-    state?: string;
-    country: string;
-    zipCode?: string;
 }
