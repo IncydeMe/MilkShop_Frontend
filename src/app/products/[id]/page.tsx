@@ -11,6 +11,9 @@ import { Badge } from "@/components/ui/badge";
 import { useSingleCategory } from "@/hooks/product/useProductCategory";
 
 import Cookies from "js-cookie";
+import { useFeedbacksByProduct } from "@/hooks/feedback/feedback";
+import { useFeedbackMediaList } from "@/hooks/feedback/feedbackMedia";
+import FeedbackCard from "@/components/shared/user/feedback-card";
 
 const RatingToStars = ({ rating = 0 }: { rating?: number }) => {
   const stars = [];
@@ -25,8 +28,7 @@ function ProductDetailsPage({ params }: { params: { id: number } }) {
   const { products } = useProduct();
   const { category } = useSingleCategory(product?.productCategoryId || 0);
 
-  console.log(category?.categoryName);
-
+  //Get random products
   const getRandomProducts = (list: typeof products) => {
     let shuffle = list.sort(() => Math.random() - 0.5);
     return shuffle.slice(0, 4);
@@ -131,6 +133,7 @@ function ProductDetailsPage({ params }: { params: { id: number } }) {
         <h2 className="text-[36px] font-semibold underline undeline-offset-2">
           Phản hồi từ người sử dụng
         </h2>
+        <FeedbackCard productId={params.id} />
       </section>
     </section>
   );
