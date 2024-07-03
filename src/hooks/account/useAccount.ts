@@ -41,7 +41,7 @@ export const useAccount = () => {
  * @param user id 
  * @returns account, loading state, and error state
  */
-export const useSingleAccount = async (id: number) => {
+export const useSingleAccount = (id: number) => {
     const [account, setAccount] = useState<Account | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<Error | null>(null);
@@ -61,6 +61,10 @@ export const useSingleAccount = async (id: number) => {
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        fetchAccount(id);
+    }, [id]);
 
     return { account, loading, error };
 };

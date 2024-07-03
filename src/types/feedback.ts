@@ -1,6 +1,6 @@
 //A Feedback consist of a feedback id, a account id, a product id, a content, a created date, and a rating.
 export type Feedback = {
-    id: number;
+    feedbackId: number;
     accountId: number;
     productId: number;
     content: string;
@@ -10,7 +10,7 @@ export type Feedback = {
 }
 
 export type FeedbackMedia = {
-    id: number;
+    feedbackMediaId: number;
     feedbackId: number;
     mediaUrl: string;
     mediaType: MediaType;

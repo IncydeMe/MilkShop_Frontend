@@ -66,7 +66,7 @@ export const createFeedbackMedia = async (feedbackMedia: FeedbackMedia) => {
 //Update an existing feedback media
 export const updateFeedbackMedia = async (feedbackMedia: FeedbackMedia) => {
     try {
-        await axios.put(`/feedback-media/${feedbackMedia.id}`, feedbackMedia);
+        await axios.put(`/feedback-media/${feedbackMedia.feedbackMediaId}`, feedbackMedia);
     } catch (error : any) {
         throw new Error(error.message);
     }

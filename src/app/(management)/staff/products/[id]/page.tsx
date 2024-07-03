@@ -17,6 +17,10 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { useSingleCategory } from '@/hooks/product/useProductCategory';
+import { useFeedbacksByProduct } from '@/hooks/feedback/feedback';
+import { useFeedbackMediaList } from '@/hooks/feedback/feedbackMedia';
+import FeedbackCard from '@/components/shared/user/feedback-card';
+import StaffProductFeedbackCard from '@/components/shared/management/staff/staff-product-feedback-card';
 
 const RatingToStars = ({ rating = 0 }: { rating?: number }) => {
     const stars = [];
@@ -31,11 +35,17 @@ function ProductDetailsPage({params}: {params: {id: number}}) {
     const { product, loading, error } = useSingleProduct(params.id);
     const { category } = useSingleCategory(product?.productCategoryId || 0);
 
+    const { feedbacks, loading: feedbackLoading, error: feedbackError } = useFeedbacksByProduct(params.id);
+    const { feedbackMediaList } = useFeedbackMediaList();
+
+    const getFeedbackMedia = (feedbackId: number) => {
+        const fmlProduct = feedbackMediaList.filter((media) => media.feedbackId === feedbackId)
+        return fmlProduct;
+    }
+
     if (error) {
         return <p>{error.message}</p>;
     }
-
-    console.log(product?.imageUrl);
 
     const categoryBadge = () => {
       let badgeColor = '';
@@ -125,11 +135,12 @@ function ProductDetailsPage({params}: {params: {id: number}}) {
                             <div className='flex items-center gap-4 '>
                                 <span className='flex items-center gap-2'>
                                   <p className='font-semibold underline'>Số điểm đánh giá trung bình:</p> 
+                                  {RatingToStars({rating: product?.totalRating})}
                                   {product?.totalRating}
                                 </span>
-                                <span>
-                                  (Số lượt đánh giá hiện có: 
-                                  {product?.feedbacks?.length}) 
+                                <span className='flex items-center gap-2'>
+                                  <p>(Số lượt đánh giá hiện có:</p> 
+                                  <p>{feedbacks?.length}) </p>
                                 </span>
                             </div>
                         )
@@ -197,7 +208,7 @@ function ProductDetailsPage({params}: {params: {id: number}}) {
             </section>
             <section>
                 <h2 className='text-[36px] font-semibold underline undeline-offset-2'>Phản hồi từ người sử dụng</h2>
-                
+                <StaffProductFeedbackCard productId={params.id} />
             </section>
         </section>
     )

@@ -54,6 +54,29 @@ export const useSingleFeedback = (id: number) => {
     return { feedback, loading, error };
 };
 
+export const useFeedbacksByProduct = (productId: number) => {
+    const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<Error | null>(null);
+
+    const fetchFeedbacksByProduct = async (productId: number) => {
+        try {
+            const response = await axios.get<Feedback[]>(`/feedbacks/product/${productId}`);
+            setFeedbacks(response.data);
+        } catch (error : any) {
+            setError(error.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchFeedbacksByProduct(productId);
+    }, [productId]);
+
+    return { feedbacks, loading, error };
+}
+
 //Create a new feedback
 export const createFeedback = async (feedback: Feedback) => {
     try {
@@ -66,7 +89,7 @@ export const createFeedback = async (feedback: Feedback) => {
 //Update an existing feedback
 export const updateFeedback = async (feedback: Feedback) => {
     try {
-        await axios.put(`/feedbacks/${feedback.id}`, feedback);
+        await axios.put(`/feedbacks/${feedback.feedbackId}`, feedback);
     } catch (error : any) {
         throw new Error(error.message);
     }
