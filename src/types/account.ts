@@ -1,5 +1,9 @@
+import { Gift } from "./gift";
+import { Order } from "./order";
+import { Voucher } from "./voucher";
+
 export type Account = {
-    id: number;
+    accountId: number;
     name: string;
     fullName?: string;
     email: string;
@@ -12,6 +16,10 @@ export type Account = {
     dateOfBirth?: Date;
     disabled: boolean;
     address: string;
+    point?: number;
+    orders?: Order[];
+    vouchers?: Voucher[];
+    gifts?: Gift[];
 }
 
 export enum Role {

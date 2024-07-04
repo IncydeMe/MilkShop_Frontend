@@ -1,20 +1,19 @@
-import { Account, Address } from "./account";
+import { Account } from "./account";
+import { Cart, CartProduct } from "./cart";
 import { Product } from "./product";
 
 export type Order = {
-    id: number;
+    orderId?: number;
     accountId: number;
-    voucherCode: string;
-    orderStatus: OrderStatus;
-    payment: Payment;
-    address: Address;
-    orderDate: Date;
+    voucherCode: number;
+    totalPrice: number;
+    status: string;
 }
 
 export type OrderDetail = {
-    id: number;
-    order: Order;
-    orderItem: OrderItem[];
+    orderId: number;
+    orderDetailId: number;
+    cart: CartProduct[];
 }
 
 export type OrderStatus = {
@@ -26,22 +25,4 @@ export type OrderItem = {
     id: number;
     quantity: number;
     product: Product;
-}
-
-export type Payment = {
-    id: number;
-    totalPrice: number;
-    paymentDate: Date;
-    paymentMethod: PaymentMethod; //credit card, debit card, paypal, etc.
-    paymentStatus: PaymentStatus; //pending, completed, cancelled
-}
-
-export type PaymentMethod = {
-    id: number;
-    name: string;
-}
-
-export type PaymentStatus = {
-    id: number;
-    name: string;
 }

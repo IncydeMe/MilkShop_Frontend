@@ -37,10 +37,7 @@ const FeedbackCard:React.FC<FeedbackProductCardProps> = ({
 
   //Get feedback media for each feedback
   const getFeedbackMedia = (feedbackId: number) => {
-    const fmlProduct = feedbackMediaList.filter((media) => media.feedbackId === feedbackId)
-    fmlProduct.forEach(element => {
-      console.log(element.mediaUrl);
-    });
+    const fmlProduct = feedbackMediaList.filter((media) => media.feedbackId === feedbackId);
     return fmlProduct;
   };
 
@@ -73,16 +70,16 @@ const FeedbackCard:React.FC<FeedbackProductCardProps> = ({
               <div className='flex gap-2 py-2'>
                 {getFeedbackMedia(feedback.feedbackId).map((media) => (
                   <div key={media.feedbackMediaId}>
-                    {/* <Image src={media.mediaUrl} alt={media.feedbackMediaId.toString()} layout="fill" objectFit="cover" /> */}
-                    <img src={"https://images.unsplash.com/photo-1550583724-b2692b85b150?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"} alt={media.feedbackMediaId.toString()} className='w-40 h-40 object-cover' />
+                    <img src={media.mediaUrl} alt={media.feedbackMediaId.toString()} className='w-full h-[240px] object-cover'/>
+                    {/* <img src={"https://images.unsplash.com/photo-1550583724-b2692b85b150?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"} alt={media.feedbackMediaId.toString()} className='w-40 h-40 object-cover' /> */}
                   </div>
                 ))}
               </div>
             </CardDescription>
           </CardHeader>
-          <CardFooter className='flex items-end gap-2'>
+          <CardFooter className='flex items-end gap-4'>
             <div className='flex items-center'>{ratingToStars(feedback.rating)}</div>
-            <p className='text-xs'>({feedback.rating})</p>
+            <p className='text-xs'>{feedback.rating}</p>
           </CardFooter>
         </Card>
       ))}

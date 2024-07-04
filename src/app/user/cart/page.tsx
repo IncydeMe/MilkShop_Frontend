@@ -22,6 +22,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import EmptyCartImage from "../../../../public/Empty.png";
 import TransitionLink from "@/components/transition-link";
+import Link from "next/link";
 
 function UserCartPage() {
     const cart = useCartStore((state) => state.cart);
@@ -49,7 +50,7 @@ function UserCartPage() {
             <section className="flex flex-col items-center justify-center">
                 <Image src={EmptyCartImage} alt="Empty cart" className="w-[300px] h-[300px] object-cover"/>
                 <h1 className="text-[36px] font-bold uppercase mt-4">Chưa có sản phẩm nào trong giỏ hàng</h1>
-                <p className="text-[18px] text-center mt-4">Hãy chọn sản phẩm để thêm vào giỏ hàng</p>
+                <p className="text-[16px] text-center mt-4">Hãy chọn sản phẩm để thêm vào giỏ hàng</p>
                 <Button 
                     className="px-4 py-2 bg-pink-500 hover:bg-pink-600 transition-all ease-in-out duration-500 text-white rounded-[4px] mt-4"
                     onClick={() => router.back()}
@@ -68,19 +69,19 @@ function UserCartPage() {
             <Table className="border-[1px] border-black mt-4">
                 <TableHeader>
                     <TableRow className="border-[1px] border-gray-800">
-                        <TableHead className="w-[100px] text-[18px] text-left font-bold">STT</TableHead>
-                        <TableHead className="w-[480px] text-[18px] font-bold">Tên sản phẩm</TableHead>
-                        <TableHead className="text-[18px] font-bold">Hình ảnh</TableHead>
-                        <TableHead className="text-[18px] font-bold">Số lượng</TableHead>
-                        <TableHead className="text-[18px] text-center font-bold">Đơn giá</TableHead>
-                        <TableHead className="text-[18px] w-[160px] text-right font-bold">Thành giá</TableHead>
+                        <TableHead className="w-[100px] text-[16px] text-left font-bold">STT</TableHead>
+                        <TableHead className="w-[480px] text-[16px] font-bold">Tên sản phẩm</TableHead>
+                        <TableHead className="text-[16px] font-bold">Hình ảnh</TableHead>
+                        <TableHead className="text-[16px] font-bold">Số lượng</TableHead>
+                        <TableHead className="text-[16px] text-center font-bold">Đơn giá</TableHead>
+                        <TableHead className="text-[16px] w-[160px] text-right font-bold">Thành giá</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {cart.map((product, index) => (
                         <TableRow key={index} className="border-[1px] border-gray-800">
-                            <TableCell className="text-[18px] text-left">{index + 1}</TableCell>
-                            <TableCell className="text-[18px]">{product.name}</TableCell>
+                            <TableCell className="text-[16px] text-left">{index + 1}</TableCell>
+                            <TableCell className="text-[16px]">{product.name}</TableCell>
                             <TableCell>
                                 <img src={product.imageUrl} alt={product.name} className="w-[100px] h-[100px] object-cover"/>
                             </TableCell>
@@ -94,7 +95,7 @@ function UserCartPage() {
                                         type="number"
                                         value={product.quantity}
                                         readOnly
-                                        className="w-[60px] text-center text-[18px]"
+                                        className="w-[60px] text-center text-[16px]"
                                     />
                                     <Button variant={"outline"} size={"icon"} onClick={() => handlePlus(product)} className="bg-black text-white">
                                         <Plus size={16} />
@@ -102,7 +103,7 @@ function UserCartPage() {
                                 </div>
                             </div>
                             </TableCell>
-                            <TableCell className="text-center text-[18px] font-medium">
+                            <TableCell className="text-center text-[16px] font-medium">
                             {product.price.toLocaleString(
                                 "vi-VN",
                                 {
@@ -110,7 +111,7 @@ function UserCartPage() {
                                     currency: "VND",
                                 }
                             )}</TableCell>
-                            <TableCell className="text-right text-[18px] font-medium">
+                            <TableCell className="text-right text-[16px] font-medium">
                             {(product.price * product.quantity).toLocaleString(
                                 "vi-VN",
                                 {
@@ -139,19 +140,21 @@ function UserCartPage() {
 
             {/* Checkout Button */}
             <div className="mt-4 text-right flex justify-end items-center gap-6">
-                <TransitionLink 
-                    variant={'outline'} 
-                    className="px-4 py-2 border-purple-500 hover:bg-purple-600 transition-all ease-in-out duration-500 text-purple-500 hover:text-white rounded-[4px]"
-                    href="/products"
-                    >
-                    Tiếp tục mua sắm
-                </TransitionLink>
-                <TransitionLink 
-                    className="px-4 py-2 bg-pink-500 hover:bg-pink-600 transition-all ease-in-out duration-500 text-white rounded-[4px]"
-                    href='/user/checkout'
-                >
-                    Thanh toán
-                </TransitionLink>
+                <Link href="/products">
+                    <Button 
+                        variant={'outline'} 
+                        className="px-4 py-2 border-purple-500 hover:bg-purple-600 transition-all ease-in-out duration-500 text-purple-500 hover:text-white rounded-[4px]"
+                        >
+                        Tiếp tục mua sắm
+                    </Button>
+                </Link >
+                <Link href={'/user/checkout'}>
+                    <Button
+                        className="px-4 py-2 bg-pink-500 hover:bg-pink-600 transition-all ease-in-out duration-500 text-white rounded-[4px]"
+                        >
+                        Thanh toán
+                    </Button>
+                </Link>
             </div>
         </section>
      );
