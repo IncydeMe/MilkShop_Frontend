@@ -67,7 +67,7 @@ export const createOrder = async (order: Order) => {
 export const updateOrder = async (order: Order) => {
     try {
     } catch (error : any) {
-        await axios.put(`/orders/${order.id}`, order);
+        await axios.put(`/orders/${order.orderId}`, order);
         throw new Error(error.message);
     }
 };
