@@ -64,9 +64,37 @@ export const createProduct = async (product: Product) => {
 };
 
 //Update an existing product
-export const updateProduct = async (product: Product) => {
+export const updateProduct = async (product: Product, productId: number) => {
     try {
-        await axios.put(`/products/${product.productId}`, product);
+        await axios.put(`/products/${productId}`, product)
+            .then((response) => {
+                if(response.status === 200) {
+                    console.log("Product updated successfully");
+                    window.alert("Cập nhật sản phẩm thành công")
+                    window.location.href = "/staff/products";
+                }
+                else if(response.status === 400) {
+                    console.log("Bad request");
+                    window.alert("Yêu cầu không hợp lệ")
+                    window.location.reload();
+                }
+                else if(response.status === 404 || response.status === 409 || response.status === 422) {
+                    console.log("Product not found");
+                    window.alert("Không tìm thấy sản phẩm")
+                    window.location.reload();
+                }
+                else if(response.status === 500) {
+                    console.log("Internal server error");
+                    window.alert("Lỗi máy chủ nội bộ");
+                    window.location.reload();
+                }
+
+                else if(response.data.status === -1) {
+                    console.log("Product not found");
+                    window.alert("Không tìm thấy sản phẩm");
+                    window.location.reload();
+                }
+            });
     } catch (error : any) {
         throw new Error(error.message);
     }

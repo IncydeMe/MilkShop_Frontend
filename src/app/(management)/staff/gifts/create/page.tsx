@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -21,12 +21,14 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Textarea } from '@/components/ui/textarea';
 import * as zod from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, Minus, Paperclip, Plus } from 'lucide-react';
+import { type Product } from '@/types/product';
 import { Shell } from '@/components/file-upload/shell';
 import { BasicUploaderDemo } from '@/app/_components/uploader';
 import { useRouter } from 'next/navigation';
+import { ReactHookFormDemo } from '@/app/_components/react-hook-form';
 
-import { updateGift, useSingleGift } from '@/hooks/gift/useGift';
+import { createGift } from '@/hooks/gift/useGift';
 import { Gift } from '@/types/gift';
 
 const formSchema = zod.object({
@@ -37,31 +39,17 @@ const formSchema = zod.object({
     image: zod.instanceof(File).optional(),
 });
 
-function EditGiftPage({params} : {params: {id: number}}) {
-    const { gift } = useSingleGift(params.id);
-
+function CreateGiftPage() {
     const form = useForm<zod.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: gift?.name ,
-            description: gift?.description,
-            price: gift?.point.toString(),
+            name: "",
+            description: "",
+            price: "0",
             image: undefined,
-            quantity: gift?.quantity.toString(),
+            quantity: "1",
         }
     });
-
-    // Update form values when product data is loaded
-  useEffect(() => {
-    if (gift) {
-      form.reset({
-        name: gift.name,
-        description: gift.description,
-        price: gift.point.toString(),
-        quantity: gift.quantity.toString(),
-      });
-    }
-  }, [gift]);
 
     const handleSubmit = () => {
 
@@ -73,7 +61,6 @@ function EditGiftPage({params} : {params: {id: number}}) {
         } = form.getValues();
 
         const newGift: Gift = {
-            giftId: gift?.giftId || 0,
             name: name,
             description: description,
             point: Number(price),
@@ -82,10 +69,10 @@ function EditGiftPage({params} : {params: {id: number}}) {
         }
 
         try {
-            updateGift(newGift);
-            toast.success("Cập món quà thành công");
+            createGift(newGift);
+            toast.success("Tạo món quà thành công");
             sessionStorage.removeItem('uploadedFileURL');
-            router.push("/staff/gifts");
+            router.push("/management/staff/gifts");
         } catch (error) {
             toast.error("Tạo món quà thất bại");
             router.refresh();
@@ -97,7 +84,7 @@ function EditGiftPage({params} : {params: {id: number}}) {
         <div>
             <span className='flex items-center gap-4'>
                 <ChevronLeft size={36} onClick={() => router.back()} className='cursor-pointer'/>
-                <h1 className='text-[36px] font-bold'>Cập nhật phần quà</h1>
+                <h1 className='text-[36px] font-bold'>Thêm phần quà mới</h1>
             </span>
             <Toaster position='top-center'/>
             <Form {...form}>
@@ -211,4 +198,4 @@ function EditGiftPage({params} : {params: {id: number}}) {
     )
 }
 
-export default EditGiftPage
+export default CreateGiftPage

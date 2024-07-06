@@ -216,7 +216,7 @@ const UserHeader: React.FC = () => {
           </ul>
         </nav>
         <nav>
-          {Cookies.get("token") != null && Cookies.get("token") !== "" ? (
+          {Cookies.get("token") != null && Cookies.get("token")?.match("") ? (
             <ul className="flex gap-x-10 w-full">
               {userNav.map((nav, index) => (
                 <li key={index} className="w-full">

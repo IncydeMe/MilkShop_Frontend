@@ -72,7 +72,7 @@ function StaffGiftListPage() {
                     <h1 className="text-[36px] font-semibold mb-2">Danh sách các phần quà của cửa hàng</h1>
                     <p className="text-[16px] font-medium my-2">Cập nhật đến: {currentDate}</p>
                 </span>
-                <Link href='/staff/products/create'>
+                <Link href='/staff/gifts/create'>
                     <Button variant="default" className="bg-green-500 text-white hover:bg-green-600 rounded-[4px] flex gap-4 items-center">
                         Thêm phần quà
                         <Gift size={24} />
@@ -128,7 +128,7 @@ function StaffGiftListPage() {
                                     <div className='flex gap-4'>
                                       <Button
                                         onClick={() =>{
-                                          deleteGift(product.giftId);
+                                          deleteGift(product?.giftId || 0);
                                           window.location.href = '/staff/gifts';
                                         }}
                                         variant="default" 

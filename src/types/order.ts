@@ -1,28 +1,29 @@
-import { Account } from "./account";
-import { Cart, CartProduct } from "./cart";
-import { Product } from "./product";
-
+/**
+ * Order, used to store the details of an order
+ */
 export type Order = {
+    /** Order Id of the order */
     orderId?: number;
+    /** Account Id of the order creator, also means the user buying products */
     accountId: number;
-    voucherCode: number;
-    totalPrice: number;
+    /** Order voucher id, which is the voucher that was applied to the order */
+    voucherId: number;
+    /** Order detail id */
+    orderDetailId: number;
+    /** Order status */
     status: string;
 }
 
+/**
+ * Order Detail, used to store the details of an order detail
+ */
 export type OrderDetail = {
-    orderId: number;
+    /** Order Detail Id of Order Detail */
     orderDetailId: number;
-    cart: CartProduct[];
-}
-
-export type OrderStatus = {
-    id: number;
-    name: string;//pending, processing, completed, cancelled
-}
-
-export type OrderItem = {
-    id: number;
+    /** Product Id of the Order, which is any product in the order */
+    productId: number;
+    /** Quantity of each product in the order detail */
     quantity: number;
-    product: Product;
+    /** Total price of the order */
+    totalPrice: number;
 }
