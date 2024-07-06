@@ -82,4 +82,8 @@ export const useCartStore = create<State & Actions>((set, get) => ({
     }
   },
   clearCart: () => set(INITIAL_STATE),
+  saveCart: () => {
+    const cart = get().cart;
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }
 }));

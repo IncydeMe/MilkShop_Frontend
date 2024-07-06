@@ -1,22 +1,24 @@
-//A Feedback consist of a feedback id, a account id, a product id, a content, a created date, and a rating.
+/**
+ * Feedback, used to store the details of a feedback
+ */
 export type Feedback = {
+    /** Feedback Id of the feedback */
     feedbackId: number;
-    accountId: number;
+    /** Product Id of the feedback */
     productId: number;
-    content: string;
-    createdDate: Date;
-    rating: number;
-    feedbackMedia: FeedbackMedia[];
-}
-
-export type FeedbackMedia = {
+    /** Account Id of the feedback creator */
+    accountId: number;
+    /** Feedback Media Id of the feedback, this will use to query the medias of the feedback*/
     feedbackMediaId: number;
-    feedbackId: number;
-    mediaUrl: string;
-    mediaType: MediaType;
+    /** Rating points of the feedback */
+    rating: number;
+    /** Content of the feedback */
+    content: string;
+    /** Status of the feedback */
+    isReported: boolean;
+    /** Created time of the feedback */
+    createdAt: Date;
+    /** Updated time of the feedback */
+    updatedAt: Date;
 }
 
-export enum MediaType {
-    IMAGE = "IMAGE",
-    VIDEO = "VIDEO"
-}
