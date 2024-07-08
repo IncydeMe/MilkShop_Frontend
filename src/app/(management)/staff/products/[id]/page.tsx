@@ -49,7 +49,7 @@ function ProductDetailsPage({params}: {params: {id: number}}) {
 
     const categoryBadge = () => {
       let badgeColor = '';
-      switch (category?.productCategoryId) {
+      switch (category?.categoryId) {
           case 1:
               badgeColor = 'blue';
               break;
@@ -76,11 +76,11 @@ function ProductDetailsPage({params}: {params: {id: number}}) {
       return (
           <>
               {
-                  category && <Badge className={`text-white bg-${badgeColor}-500 hover:bg-${badgeColor}-700 w-fit`}>{category.categoryName}</Badge>
+                  category && <Badge className={`text-white bg-${badgeColor}-500 hover:bg-${badgeColor}-700 w-fit`}>{category.name}</Badge>
               }
           </>
       )
-  }
+    }
 
     return (
         <section className='flex flex-col gap-10'>
@@ -94,15 +94,8 @@ function ProductDetailsPage({params}: {params: {id: number}}) {
                         loading? (
                             <Skeleton className='w-[480px] h-full bg-gray-500 rounded-[8px] shadow-md'/>
                         ) : (
-                            <Dialog>
-                              <DialogTrigger className='w-full h-full'>
-                                <img src={product?.imageUrl} alt={product?.name} className='w-[640px] h-full object-cover rounded-[8px] shadow-md'/>
-                              </DialogTrigger>
-                              <DialogContent className='bg-white'>
-                                <img src={product?.imageUrl} alt={product?.name} className='w-full h-full object-cover rounded-[8px] shadow-md'/>
-                              </DialogContent>
-                            </Dialog>
-                        )
+                            <img src={""} alt={product?.name} className='w-[480px] h-[480px] object-cover rounded-[8px] shadow-md'/>
+                        )  
                     }
                 </div>
                 <div className='flex flex-col gap-4'>

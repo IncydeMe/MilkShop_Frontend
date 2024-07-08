@@ -49,9 +49,9 @@ function StaffProductListPage() {
     const currentDate = `${currentDay}/${currentMonth}/${currentYear}, thời gian hiện tại: ${currentHour}:${currentMinute}`;
 
     const categoryBadge = (categoryId: number) => {
-        const category = categories.find(category => category.productCategoryId === categoryId);
+        const category = categories.find(category => category.categoryId === categoryId);
         let badgeColor = '';
-        switch (category?.productCategoryId) {
+        switch (category?.categoryId) {
             case 1:
                 badgeColor = 'blue';
                 break;
@@ -78,7 +78,7 @@ function StaffProductListPage() {
             <>
                 {
                     category && <Badge className={`text-white bg-${badgeColor}-500 hover:bg-${badgeColor}-700`}>
-                        {category.categoryName}
+                        {category.name}
                     </Badge>
                 }
             </>
@@ -129,7 +129,7 @@ function StaffProductListPage() {
                             <TableHead className="text-[14px]">STT</TableHead>
                             <TableHead>Tên sản phẩm</TableHead>
                             <TableHead className="text-[14px]">Loại sản phẩm</TableHead>
-                            <TableHead className="text-[14px]">Số lượng</TableHead>
+                            <TableHead className="text-[14px]">Số lượng trong kho</TableHead>
                             <TableHead className="text-[14px]">Giá bán</TableHead>
                             <TableHead colSpan={3} className="text-[14px]">Hành động</TableHead>
                         </TableRow>
@@ -141,7 +141,7 @@ function StaffProductListPage() {
                                     <TableCell>{index + 1}</TableCell>
                                     <TableCell>{product.name}</TableCell>
                                     <TableCell>{categoryBadge(product.productCategoryId)}</TableCell>
-                                    <TableCell>{product.quantity}</TableCell>
+                                    <TableCell>{product.quantityInStock}</TableCell>
                                     <TableCell>{product.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</TableCell>
                                     <TableCell className="flex gap-4">
                                         <Link href={`/staff/products/${product.productId}`}>

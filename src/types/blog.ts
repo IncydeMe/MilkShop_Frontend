@@ -1,13 +1,5 @@
 /**
  * Blog, used to store the details of a blog
- * @param blogId: number, the id of the blog
- * @param blogCategoryId: number, the id of the blog category
- * @param accountId: number, the id of the account created the blog
- * @param title: string, the title of the blog
- * @param createAt: Date, the created date of the blog
- * @param updatedAt: Date, the updated date of the blog
- * @param docUrl: string, the document url of the blog
- * @param imageUrl: string, the image url of the blog
  */
 export type Blog = {
     /**  Blog id of the blog */

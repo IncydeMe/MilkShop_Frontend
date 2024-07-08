@@ -7,7 +7,7 @@ export type Feedback = {
     /** Product Id of the feedback */
     productId: number;
     /** Account Id of the feedback creator */
-    accountId: number;
+    accountId: string;
     /** Feedback Media Id of the feedback, this will use to query the medias of the feedback*/
     feedbackMediaId: number;
     /** Rating points of the feedback */

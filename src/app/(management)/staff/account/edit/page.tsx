@@ -50,7 +50,7 @@ function EditProfilePage() {
         resolver: zodResolver(profileSchema),
         defaultValues: {
             email: account?.email,
-            name: account?.name,
+            name: account?.fullName,
             phone: account?.phone,
             address: account?.address,
             profileImage: undefined,
