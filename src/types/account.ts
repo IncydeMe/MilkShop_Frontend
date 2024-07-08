@@ -17,7 +17,7 @@ export type Account = {
     /** Phone number of the account */
     phone: string;
     /** Role of the account */
-    role: Role;
+    role: string;
     /** Avatar url of the account */
     avatarUrl?: string;
     /** Created date of the account */
@@ -40,16 +40,4 @@ export type Account = {
     gifts?: Gift[];
     /** Blogs written by the account */
     blogs?: Blog[];
-}
-
-/**
- * Role, used to store the role of an account
- * @param ADMIN: string, the admin role
- * @param USER: string, the user role
- * @param STAFF: string, the staff role
- */
-export enum Role {
-    ADMIN = "ADMIN",
-    USER = "USER",
-    STAFF = "STAFF"
 }

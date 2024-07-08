@@ -85,17 +85,17 @@ function ProductCategoriesPage() {
         </TableHeader>
         <TableBody>
           {currentItems.map((category, index) => (
-            <TableRow key={category.productCategoryId}>
+            <TableRow key={category.categoryId}>
               <TableCell>{index + 1}</TableCell>
-              <TableCell>{category.categoryName}</TableCell>
+              <TableCell>{category.name}</TableCell>
               <TableCell className="flex gap-4">
-                <Link href={`/staff/categories/${category.productCategoryId}`}>
+                <Link href={`/staff/categories/${category.categoryId}`}>
                   <Button variant="default" className="bg-blue-500 text-white hover:bg-blue-600 rounded-[4px] flex gap-4 items-center">
                     Chi tiết
                     <ChevronRight size={24} />
                   </Button>
                 </Link>
-                <Link href={`/staff/categories/${category.productCategoryId}/edit`}>
+                <Link href={`/staff/categories/${category.categoryId}/edit`}>
                   <Button variant="default" className="bg-purple-500 text-white hover:bg-purple-600 rounded-[4px] flex gap-4 items-center">
                     Cập nhật
                     <SquarePen size={24} />
@@ -118,7 +118,7 @@ function ProductCategoriesPage() {
                     <div className='flex gap-4'>
                       <Button
                         onClick={() => {
-                          deleteCategory(category.productCategoryId);
+                          deleteCategory(category.categoryId);
                           toast.success('Xóa sản phẩm thành công!');
                           window.location.href = '/staff/products';
                         }}

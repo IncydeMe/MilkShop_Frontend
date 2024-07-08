@@ -35,8 +35,8 @@ function AccountProfile() {
             <section className="flex gap-4 mb-4">
                 <div className="w-[200px] h-[200px]">
                     {
-                        account?.imageUrl ? (
-                            <img src={account.imageUrl} alt="Avatar" className="w-full h-full object-cover rounded-full" />
+                        account?.avatarUrl ? (
+                            <img src={account.avatarUrl} alt="Avatar" className="w-full h-full object-cover rounded-full" />
                         ) : (
                             <Skeleton className="w-full h-full rounded-full bg-gray-600" />
                         )

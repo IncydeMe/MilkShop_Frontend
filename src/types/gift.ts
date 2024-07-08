@@ -5,7 +5,7 @@ export type Gift = {
     /** Gift Id of the gift */
     giftId?: number;
     /** Account Id of the gift creator */
-    accountId?: number;
+    accountId?: string;
     /** Gift Name */
     name: string;
     /** Member points required to redeem the gift */
@@ -38,6 +38,4 @@ export type Gifted = {
     status?: string;
     /** Created date of the gifted gift */
     createdAt?: Date;
-    /** Updated date of the gifted gift */
-    updatedAt?: Date;
 }
