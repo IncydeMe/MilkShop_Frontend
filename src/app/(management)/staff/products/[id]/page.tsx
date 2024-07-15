@@ -1,4 +1,4 @@
-    'use client';
+'use client';
 
 import React from 'react'
 import { useSingleProduct, deleteProduct } from '@/hooks/product/useProduct'
@@ -91,13 +91,13 @@ function ProductDetailsPage({params}: {params: {id: number}}) {
                 <Link href='/staff/products'><ChevronLeft size={36} /></Link>
                 <h1 className='text-[36px] font-bold underline underline-offset-2'>Chi tiết sản phẩm</h1>
             </section>
-            <section className='flex gap-10'>
+            <section className='flex items-center gap-10'>
                 <div>
                     {
                         loading? (
                             <Skeleton className='w-[480px] h-full bg-gray-500 rounded-[8px] shadow-md'/>
                         ) : (
-                            <img src={productImage?.url} alt={product?.name} className='w-[480px] h-[480px] object-cover rounded-[8px] shadow-md'/>
+                            <img src={productImage?.url} alt={product?.name} className='w-full h-full object-cover rounded-[8px] shadow-md'/>
                         )  
                     }
                 </div>

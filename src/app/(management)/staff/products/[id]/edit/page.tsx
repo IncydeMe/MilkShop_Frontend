@@ -37,7 +37,7 @@ const formSchema = zod.object({
   //Object for form validation
   productName: zod.string().min(1, { message: "Tên sản phẩm không được để trống" }).max(255, { message: "Tên sản phẩm không được quá 255 ký tự" }),
   productPrice: zod.number().min(0, { message: "Giá sản phẩm không được nhỏ hơn 0" }),
-  productCategoryId: zod.number().min(1, { message: "Danh mục sản phẩm không được để trống" }),
+  productCategoryName: zod.string().min(1, { message: "Danh mục sản phẩm không được để trống" }),
   productDescription: zod.string().min(1, { message: "Mô tả sản phẩm không được để trống" }),
   productImageSrc: zod.string().min(1, { message: "Hình ảnh sản phẩm không được để trống" }),
   productQuantity: zod.number().min(0, { message: "Số lượng sản phẩm trong kho không được nhỏ hơn 0" }),
@@ -160,10 +160,9 @@ function UpdateProductPage({params} : {params: {id: number}}) {
       form.reset({
         productName: product.name,
         productPrice: product.price,
-        productCategoryId: product.productCategoryId,
+        productCategoryName: product.categoryName,
         productDescription: product.description,
-        productImageSrc: product.imageUrl,
-        productQuantity: product.quantity
+        productQuantity: product.quantityInStock
       });
     }
   }, [product]);
@@ -173,10 +172,9 @@ function UpdateProductPage({params} : {params: {id: number}}) {
     defaultValues: {
       productName: product?.name || '',
       productPrice: product?.price || 100000,
-      productCategoryId: product?.productCategoryId || 1 ,
+      productCategoryName: product?.categoryName || '' ,
       productDescription: product?.description || '',
-      productImageSrc: product?.imageUrl || '',
-      productQuantity: product?.quantity || 1
+      productQuantity: product?.quantityInStock || 1
     }
   });
 
@@ -186,7 +184,7 @@ function UpdateProductPage({params} : {params: {id: number}}) {
     const { 
       productName, 
       productPrice, 
-      productCategoryId, 
+      productCategoryName, 
       productDescription, 
       productImageSrc, 
       productQuantity 
@@ -194,12 +192,13 @@ function UpdateProductPage({params} : {params: {id: number}}) {
 
     const newProduct: Product = {
       productId: params.id,
+      accountId: product?.accountId || '',
       name: productName || product?.name || '',
       price: Number(productPrice) || product?.price || 100000,
-      productCategoryId: productCategoryId || product?.productCategoryId || 1,
+      categoryName: productCategoryName || product?.categoryName || '',
       description: productDescription || product?.description || '',
-      imageUrl: productImageSrc || product?.imageUrl || '',
-      quantity: Number(productQuantity) || product?.quantity || 1,
+      productImages: sessionStorage.getItem('productImages') ? JSON.parse(sessionStorage.getItem('productImages') || '') : product?.productImages || [],
+      quantityInStock: Number(productQuantity) || product?.quantityInStock || 1,
       totalRating: product?.totalRating || 0,
     }
 
@@ -279,7 +278,7 @@ function UpdateProductPage({params} : {params: {id: number}}) {
               {/* Category Field */}
               <FormField
                 control={form.control}
-                name='productCategoryId'
+                name='productCategoryName'
                 render={({ field }) => {
                   return (
                     <FormItem>
@@ -292,8 +291,8 @@ function UpdateProductPage({params} : {params: {id: number}}) {
                           <SelectContent>
                             <SelectGroup>
                               {categories.map((category) => (
-                                <SelectItem key={category.productCategoryId} value={category.categoryName} className='bg-white focus:bg-gray-400'>
-                                  {category.categoryName}
+                                <SelectItem key={category.categoryId} value={category.name} className='bg-white focus:bg-gray-400'>
+                                  {category.name}
                                 </SelectItem>
                               ))}
                             </SelectGroup>

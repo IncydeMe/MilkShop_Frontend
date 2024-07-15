@@ -22,7 +22,7 @@ import { Textarea } from '@/components/ui/textarea';
 import * as zod from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ChevronLeft, Minus, Paperclip, Plus } from 'lucide-react';
-import { type Product } from '@/types/product';
+import { ProductImages, type Product } from '@/types/product';
 import { Shell } from '@/components/file-upload/shell';
 import { BasicUploaderDemo } from '@/app/_components/uploader';
 import { useRouter } from 'next/navigation';
@@ -173,9 +173,9 @@ function CreateProductPage() {
     const newProduct: Product = {
       name: productName,
       price: Number(productPrice),
-      productCategoryId: productCategoryId,
+      categoryName: categories.find(category => category.categoryId === productCategoryId)?.name || '',
       description: productDescription,
-      imageUrl: sessionStorage.getItem('uploadedFileURL') || '',
+      productImages: sessionStorage.getItem('productImages'),
       quantity: Number(productQuantity)
     }
 
@@ -270,8 +270,8 @@ function CreateProductPage() {
                           <SelectContent>
                             <SelectGroup>
                               {categories.map((category) => (
-                                <SelectItem key={category.productCategoryId} value={category.categoryName} className='bg-white focus:bg-gray-400'>
-                                  {category.categoryName}
+                                <SelectItem key={category.categoryId} value={category.name} className='bg-white focus:bg-gray-400'>
+                                  {category.name}
                                 </SelectItem>
                               ))}
                             </SelectGroup>

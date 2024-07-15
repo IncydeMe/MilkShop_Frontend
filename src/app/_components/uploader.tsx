@@ -7,6 +7,8 @@ import { FileUploader } from "@/components/file-upload/file-uploader"
 
 import { UploadedFilesCard } from "./upload-files-card"
 
+import { ProductImages } from "@/types/product"
+
 export function BasicUploaderDemo() {
   const { uploadFiles, progresses, uploadedFiles, isUploading } = useUploadFile(
     "imageUploader",
@@ -15,17 +17,24 @@ export function BasicUploaderDemo() {
 
   React.useEffect(() => {
     if(uploadedFiles.length > 0) {
-      console.log(uploadedFiles[0].url)
-      // Temporal variable to store the URL of the uploaded file
-      const url = uploadedFiles[0].url
-      sessionStorage.setItem('uploadedFileURL', url)
+      const productImages = uploadedFiles.map((file: any) => {
+        return {
+          imageId: file.id,
+          url: file.url,
+          productId: 1,
+          isThumbnail: false
+        }
+      }) as ProductImages[]
+
+
+      sessionStorage.setItem('productImages', JSON.stringify(productImages))
     }
   }, [uploadedFiles])
 
   return (
     <div className="space-y-6">
       <FileUploader
-        maxFiles={1}
+        maxFiles={4}
         maxSize={4 * 1024 * 1024}
         progresses={progresses}
         onUpload={uploadFiles}
