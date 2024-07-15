@@ -22,15 +22,21 @@ function ProductsPage() {
     const { categories } = useProductCategory();
 
     const [value, setValue] = useState([0, 9000000]);
-    const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
+    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
     const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
 
     useEffect(() => {
-        setFilteredProducts(products.filter(product =>
-            (selectedCategories.length === 0 || selectedCategories.includes(product.productCategoryId)) &&
-            product.price >= value[0] && product.price <= value[1]
-        ));
-    }, [products, selectedCategories, value]);
+        if (!products || products.length === 0) {
+            setFilteredProducts([]);
+            return;
+        }
+    
+        const updatedFilteredProducts = selectedCategories.length === 0 
+            ? products 
+            : products.filter(product => selectedCategories.includes(product.categoryName));
+    
+        setFilteredProducts(updatedFilteredProducts);
+    }, [products, selectedCategories]);
 
     //For Pagination
     const [currentPage, setCurrentPage] = useState(1);
@@ -73,21 +79,21 @@ function ProductsPage() {
                                 </div>
                                 <ul className="flex flex-col gap-2">
                                     {categories.map((category) => (
-                                        <li key={category.productCategoryId} className='flex items-center gap-2'>
+                                        <li key={category.categoryId} className='flex items-center gap-2'>
                                             <Checkbox
-                                                value={category.productCategoryId}
+                                                value={category.name}
                                                 onCheckedChange={(checked) => {
                                                     if (checked) {
-                                                        setSelectedCategories([...selectedCategories, category.productCategoryId]);
+                                                        setSelectedCategories([...selectedCategories, category.name]);
                                                     } else {
-                                                        setSelectedCategories(selectedCategories.filter((id) => id !== category.productCategoryId));
+                                                        setSelectedCategories(selectedCategories.filter((name) => name !== category.name));
                                                     }
                                                 }}
                                             />
-                                            <p className='text-black text-[14px]'>{category.categoryName}</p>
+                                            <p className='text-black text-[14px]'>{category.name}</p>
                                         </li>
                                     ))}
-                                </ul>
+                                </ul>.
                             </div>
                             {/* <div className="my-2">
                                 <h3 className="text-lg font-semibold my-2 underline underline-offset-2 uppercase">

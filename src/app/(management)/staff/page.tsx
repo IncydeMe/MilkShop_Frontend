@@ -181,10 +181,9 @@ export default function StaffHomePage() {
                   <TableRow key={i}>
                     <TableCell>{i + 1}</TableCell>
                     <TableCell>{product.name}</TableCell>
-                    <TableCell>{categories.find(category => category.productCategoryId === product
-                      .productCategoryId)?.categoryName}</TableCell>
-                    <TableCell>{product.quantity}</TableCell>
-                    <TableCell>{(product.price * product.quantity).toLocaleString(
+                    <TableCell>{product.categoryName}</TableCell>
+                    <TableCell>{product.quantityInStock}</TableCell>
+                    <TableCell>{(product.price * product.quantityInStock).toLocaleString(
                       'vi-VN', { style: 'currency', currency: 'VND' }
                     )}</TableCell>
                     <TableCell>

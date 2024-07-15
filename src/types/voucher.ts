@@ -4,8 +4,6 @@
 export type Voucher = {
     /** Voucher id of the voucher */
     voucherId: number;
-    /** Account id of the voucher creator */
-    accountId?: string;
     /** Voucher value */
     value: number;
     /** 
@@ -24,9 +22,9 @@ export type Voucher = {
     /** Voucher description */
     description: string;
     /** Voucher start time that can be used */
-    startTime: Date;
+    startDate: Date;
     /** Voucher end time that will expired */
-    endTime: Date;
+    endDate: Date;
     /** Voucher status */
     status: string;
 }

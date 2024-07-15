@@ -22,12 +22,10 @@ export type Account = {
     avatarUrl?: string;
     /** Created date of the account */
     createdAt: Date;
-    /** Updated date of the account */
-    updatedAt: Date;
     /** Date of birth of the account */
     dateOfBirth?: Date;
     /** Status of the account */
-    status: boolean;
+    disable: boolean;
     /** Address of the account */
     address: string;
     /** Point of the account */

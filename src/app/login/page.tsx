@@ -63,10 +63,10 @@ export default function LoginPage() {
           }));
 
           const roleRouteMap: { [key: string]: string } = {
-            Admin: '/admin',
-            Manager: '/manager',
-            Staff: '/staff',
-            Member: '/'
+            admin: '/admin',
+            manager: '/manager',
+            staff: '/staff',
+            member: '/'
           };
 
           route.push(roleRouteMap[userRole] || '/');

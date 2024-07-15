@@ -35,10 +35,6 @@ import Autoplay from "embla-carousel-autoplay";
 
 export default function Home() {
   const { products, error, loading } = useProduct();
-  const { categories } = useProductCategory();
-
-  //Choose 4 random categories to display
-  const randomCategories = categories.sort(() => Math.random() - 0.5).slice(0, 4);
   
   const plugin = useRef(
     Autoplay({ delay: 5000, stopOnInteraction: true})
@@ -80,37 +76,6 @@ export default function Home() {
         
         {/* Handling Success State */}
         <section>
-          {/* Category Browsing */}
-          <div>
-            <h1 className="text-2xl text-center uppercase font-bold py-4">
-              Danh mục sản phẩm
-            </h1>
-            <p className="text-center font-semibold">
-              Thử lựa chọn 1 trong các danh mục sau để tìm kiếm sản phẩm cho phù
-              hợp
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              {loading && (
-                <div className="grid grid-cols-subgrid col-span-4 my-4">
-                  <SkeletonCard />
-                  <SkeletonCard />
-                  <SkeletonCard />
-                  <SkeletonCard />
-                </div>
-              )}
-              {randomCategories.map((category) => (
-                <div className="flex flex-col gap-4 rounded-lg p-4">
-                  <Image
-                    src={CustomLoading}
-                    alt="Category"
-                    className="rounded-[8px] shadow-md"
-                  />
-                  <p className="text-center font-semibold">{category.categoryName}</p>
-                </div>
-              ))}
-              
-            </div>
-          </div>
           {/* Product Listing */}
           {/* Product will be sorted depending on their Specialty Attribute */}
           {/* First, get each specialty 4 products each */}

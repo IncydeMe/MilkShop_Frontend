@@ -21,6 +21,7 @@ import Link from 'next/link';
 import { useCartStore } from '@/hooks/cart/useCartStore';
 import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
+import { useProductImageThumbnail } from '@/hooks/product/useProductImages';
 
 interface ProductCardProps {
     product: Product,
@@ -40,20 +41,23 @@ const ProductCard : React.FC<ProductCardProps> = ({
     type
 }) => {
     const { loading } = useProduct();
-    const { category } = useSingleCategory(product.productCategoryId);
     const [hoverState, setHoverState] = React.useState(false);
     const { toast } = useToast();
+
+    const { productImage } = useProductImageThumbnail(product.productId || 0);
 
     //Handle Add to Cart
     const handleAddToCart = () => {
         const cartProduct = {
             productId: product.productId,
+            accountId: Cookies.get('userId')?.toString() || '' ,
             quantity: 1,
             price: product.price,
-            productCategoryId: product.productCategoryId,
+            categoryName: product.categoryName,
             description: product.description,
             name: product.name,
-            imageUrl: product.imageUrl,
+            productImages: product.productImages,
+            quantityInStock: product.quantityInStock,
         }
         useCartStore.getState().addToCart(cartProduct);
     }
@@ -73,7 +77,7 @@ const ProductCard : React.FC<ProductCardProps> = ({
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                         >
-                            <img src={product.imageUrl} alt={product.name} className='w-full h-[360px] rounded-[8px] object-cover'/>
+                            <img src={productImage?.url} alt={product.name} className='w-full h-[360px] rounded-[8px] object-cover'/>
                         </motion.div>
                         {hoverState && (
                             <motion.div
@@ -126,7 +130,7 @@ const ProductCard : React.FC<ProductCardProps> = ({
                     <div className='absolute top-4 right-4'>
                         {type === 'discount' && <span className='bg-red-500 text-white px-2 py-1 rounded-[4px]'>-%</span>}
                         {type === 'special' && <span className='bg-blue-500 text-white px-2 py-1 rounded-[4px]'>Special</span>}
-                        {type === 'normal' && <span className='bg-gray-500 text-white px-2 py-1 rounded-[4px]'>{category?.categoryName}</span>}
+                        {type === 'normal' && <span className='bg-gray-500 text-white px-2 py-1 rounded-[4px]'>{product.categoryName}</span>}
                     </div>
                 </CardHeader>
                 <CardContent className='w-full'>

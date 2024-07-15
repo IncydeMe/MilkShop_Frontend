@@ -1,4 +1,4 @@
-'use client';
+    'use client';
 
 import React from 'react'
 import { useSingleProduct, deleteProduct } from '@/hooks/product/useProduct'
@@ -16,11 +16,12 @@ import {
 } from "@/components/ui/dialog";
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
-import { useSingleCategory } from '@/hooks/product/useProductCategory';
+import { useProductCategory, useSingleCategory } from '@/hooks/product/useProductCategory';
 import { useFeedbacksByProduct } from '@/hooks/feedback/feedback';
 import { useFeedbackMediaList } from '@/hooks/feedback/feedbackMedia';
 import FeedbackCard from '@/components/shared/user/feedback-card';
 import StaffProductFeedbackCard from '@/components/shared/management/staff/staff-product-feedback-card';
+import { useProductImageThumbnail } from '@/hooks/product/useProductImages';
 
 const RatingToStars = ({ rating = 0 }: { rating?: number }) => {
     const stars = [];
@@ -33,10 +34,12 @@ const RatingToStars = ({ rating = 0 }: { rating?: number }) => {
 
 function ProductDetailsPage({params}: {params: {id: number}}) {
     const { product, loading, error } = useSingleProduct(params.id);
-    const { category } = useSingleCategory(product?.productCategoryId || 0);
+    const { categories } = useProductCategory();
 
     const { feedbacks, loading: feedbackLoading, error: feedbackError } = useFeedbacksByProduct(params.id);
     const { feedbackMediaList } = useFeedbackMediaList();
+
+    const { productImage } = useProductImageThumbnail(params.id);
 
     const getFeedbackMedia = (feedbackId: number) => {
         const fmlProduct = feedbackMediaList.filter((media) => media.feedbackId === feedbackId)
@@ -49,7 +52,7 @@ function ProductDetailsPage({params}: {params: {id: number}}) {
 
     const categoryBadge = () => {
       let badgeColor = '';
-      switch (category?.categoryId) {
+      switch (categories?.find(category => category.name === product?.categoryName)?.categoryId) {
           case 1:
               badgeColor = 'blue';
               break;
@@ -76,7 +79,7 @@ function ProductDetailsPage({params}: {params: {id: number}}) {
       return (
           <>
               {
-                  category && <Badge className={`text-white bg-${badgeColor}-500 hover:bg-${badgeColor}-700 w-fit`}>{category.name}</Badge>
+                  product?.categoryName && <Badge className={`text-white bg-${badgeColor}-500 hover:bg-${badgeColor}-700 w-fit`}>{product.categoryName}</Badge>
               }
           </>
       )
@@ -94,7 +97,7 @@ function ProductDetailsPage({params}: {params: {id: number}}) {
                         loading? (
                             <Skeleton className='w-[480px] h-full bg-gray-500 rounded-[8px] shadow-md'/>
                         ) : (
-                            <img src={""} alt={product?.name} className='w-[480px] h-[480px] object-cover rounded-[8px] shadow-md'/>
+                            <img src={productImage?.url} alt={product?.name} className='w-[480px] h-[480px] object-cover rounded-[8px] shadow-md'/>
                         )  
                     }
                 </div>

@@ -66,7 +66,7 @@ export const createCategory = async (category: ProductCategory) => {
 //Update a product category
 export const updateCategory = async (category: ProductCategory) => {
     try {
-        await axios.put(`/categories/${category.productCategoryId}`, category);
+        await axios.put(`/categories/${category.categoryId}`, category);
     } catch (error : any) {
         console.error(error.message);
     }

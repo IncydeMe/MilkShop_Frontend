@@ -14,6 +14,8 @@ import Cookies from "js-cookie";
 import { useFeedbacksByProduct } from "@/hooks/feedback/feedback";
 import { useFeedbackMediaList } from "@/hooks/feedback/feedbackMedia";
 import FeedbackCard from "@/components/shared/user/feedback-card";
+import { useProductImageThumbnail } from "@/hooks/product/useProductImages";
+import TransitionLink from "@/components/transition-link";
 
 const RatingToStars = ({ rating = 0 }: { rating?: number }) => {
   const stars = [];
@@ -25,8 +27,8 @@ const RatingToStars = ({ rating = 0 }: { rating?: number }) => {
 
 function ProductDetailsPage({ params }: { params: { id: number } }) {
   const { product, loading, error } = useSingleProduct(params.id);
+  const { productImage } = useProductImageThumbnail(params.id);
   const { products } = useProduct();
-  const { category } = useSingleCategory(product?.productCategoryId || 0);
 
   //Get random products
   const getRandomProducts = (list: typeof products) => {
@@ -54,7 +56,7 @@ function ProductDetailsPage({ params }: { params: { id: number } }) {
             <Skeleton className="w-[480px] h-full bg-gray-500 rounded-[8px] shadow-md" />
           ) : (
             <img
-              src={product?.imageUrl}
+              src={productImage?.url}
               alt={product?.name}
               className="w-[480px] h-full object-cover rounded-[8px] shadow-md"
             />
@@ -70,18 +72,19 @@ function ProductDetailsPage({ params }: { params: { id: number } }) {
             <Skeleton className="w-[120px] h-[36px] bg-gray-500 rounded-[8px] shadow-md" />
           ) : (
             <Badge className="w-fit bg-gray-500 hover:bg-gray-700 text-white">
-              {category?.categoryName}
+              {product?.categoryName}
             </Badge>
           )}
           {loading ? (
             <Skeleton className="w-[480px] h-[24px] bg-gray-500 rounded-[8px] shadow-md" />
           ) : (
-            <p>{product?.description}</p>
+            <em>{product?.description}</em>
           )}
           {loading ? (
             <Skeleton className="w-[120px] h-[24px] bg-gray-500 rounded-[8px] shadow-md" />
           ) : (
             <div className="flex items-center gap-4">
+              <em>Tổng điểm đánh giá:</em>
               <RatingToStars rating={product?.totalRating} />
               <p>{product?.totalRating?.toPrecision(1)}</p>
             </div>
@@ -89,14 +92,17 @@ function ProductDetailsPage({ params }: { params: { id: number } }) {
           {loading ? (
             <Skeleton className="w-[120px] h-[24px] bg-gray-500 rounded-[8px] shadow-md" />
           ) : (
-            <p className="font-semibold">
-              {product?.price.toLocaleString("vi-VN", {
-                style: "currency",
-                currency: "VND",
-              })}
-            </p>
+            <span className="flex items-center gap-2">
+              <em className="font-semibold">Giá tiền sản phẩm:</em>
+              <p className="font-semibold text-[18px]">
+                {product?.price.toLocaleString("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                })}
+              </p>
+            </span>
           )}
-          {Cookies.get('token') != null && (
+          {Cookies.get('token') != null ? (
             <div className="flex justify-start items-center gap-8">
               <Button className="bg-purple-500 text-white px-4 py-2 rounded-[8px] hover:bg-purple-600 transition-all ease-linear duration-300">
                 Mua Ngay
@@ -105,6 +111,13 @@ function ProductDetailsPage({ params }: { params: { id: number } }) {
                 Thêm vào giỏ hàng
               </Button>
             </div>
+          ): (
+            <TransitionLink
+              href="/login"
+              className="flex justify-start items-center gap-8 bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-[8px] transition-all ease-linear duration-300 w-fit"
+            >
+              Đăng nhập để mua hàng
+            </TransitionLink>
           )}
         </div>
       </section>

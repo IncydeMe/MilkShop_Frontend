@@ -4,10 +4,10 @@
 export type Blog = {
     /**  Blog id of the blog */
     blogId: number;
-    /**  Blog category id of the blog */
-    blogCategoryId: number;
+    /**  Blog category of the blog */
+    blogCategoryName: string;
     /** Account id of the blog creator */
-    accountId: number;
+    accountId: string;
     /** Title of the blog */
     title: string;
     /**  Created date of the blog */

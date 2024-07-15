@@ -21,9 +21,9 @@ function BlogDetailsPage({params}: {params: {id: string}}) {
                 <h1 className='text-[36px] uppercase font-bold'>{blog?.title}</h1>
             </div>
            
-            <p>Đăng vào: {blog?.createDate?.toTimeString()}</p>
+            <p>Đăng vào: {blog?.createAt?.toLocaleDateString()}</p>
             <img src={blog?.imageUrl} alt={blog?.title} className='w-full h-[400px] object-cover'/>
-            <p>{blog?.content}</p>
+            
         </section>
     )
 }

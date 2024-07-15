@@ -37,8 +37,6 @@ function StaffProductListPage() {
     const { categories } = useProductCategory();
     const { products, loading, error } = useProduct();
 
-
-
     //Get current day/month/year hour:minute
     const date = new Date();
     const currentDay = date.getDate();
@@ -140,7 +138,7 @@ function StaffProductListPage() {
                                 <TableRow key={index} className={`${index % 2 != 0 ? 'bg-gray-200 hover:bg-gray-300/60': 'bg-white hover:bg-gray-100'}`}>
                                     <TableCell>{index + 1}</TableCell>
                                     <TableCell>{product.name}</TableCell>
-                                    <TableCell>{categoryBadge(product.productCategoryId)}</TableCell>
+                                    <TableCell>{categoryBadge(categories.find(category => category.name.match(product.categoryName))?.categoryId || 1)}</TableCell>
                                     <TableCell>{product.quantityInStock}</TableCell>
                                     <TableCell>{product.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</TableCell>
                                     <TableCell className="flex gap-4">
